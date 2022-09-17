@@ -4,3 +4,6 @@ $ docker run --name mysqldb -p 3308:3308  -e MYSQL_ROOT_PASSWORD=31875595 -d mys
 -- LOGIN INTO MYSQL CONTAINER
 $ docker exec -it mysqldb bash
 $ mysql -u root -p
+
+-- installing software in a container
+$ apt-get install nano
