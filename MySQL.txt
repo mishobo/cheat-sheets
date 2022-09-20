@@ -6,4 +6,5 @@ $ docker exec -it mysqldb bash
 $ mysql -u root -p
 
 -- installing software in a container
+$ apt-get update
 $ apt-get install nano
