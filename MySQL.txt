@@ -1,5 +1,5 @@
 -- RUNNING A MYSQL DOCKER IMAGE
-$ docker run --name mysqldb -p 3308:3308  -e MYSQL_ROOT_PASSWORD=31875595 -d mysql:latest
+$ docker run --name mysqldb -p 3308:3306  -e MYSQL_ROOT_PASSWORD=31875595 -d mysql:latest
 
 -- LOGIN INTO MYSQL CONTAINER
 $ docker exec -it mysqldb bash
