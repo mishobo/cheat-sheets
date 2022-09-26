@@ -68,3 +68,62 @@ ENDIF.
 CATCH cx_root INTO DATA(e_txt).
 WRITE: / e_txt->get_text( ).
 ENDTRY.
+
+
+*&---------------------------------------------------------------------*
+*& Report ZMCS_JSON_TO_ABAP
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZMCS_JSON_TO_ABAP.
+*
+*[
+*    {
+*        "orgId": 3,
+*        "orgCode": "JINS",
+*        "orgName": "THE JUBILEE INSURANCE COMPANY OF KENYA",
+*        "orgContactPer": "JUBILEE ADMIN",
+*        "orgContactNo": "0709949000",
+*        "orgEmail": "talk2usHealth@jubileekenya.com",
+*        "active": false,
+*        "createdBy": 0,
+*        "respCode": 200,
+*        "wallets": null,
+*        "UserGroupId": 3475,
+*        "creationType": null
+*    }
+*]
+
+* declacation of variables and types
+TYPES: BEGIN OF ty_org,
+orgId TYPE int4,
+orgCode TYPE string,
+orgName type string,
+orgContactPer type string,
+orgContactNo type string,
+orgEmail type string,
+active type string,
+createdBy type string,
+respCode type int4,
+wallets type string,
+UserGroupId type string,
+creationType type string,
+END OF ty_org.
+
+DATA: lt_org type STANDARD TABLE OF ty_org WITH DEFAULT KEY,
+lv_json type string.
+
+lv_json = '[' &&
+  '{"orgId": 3,"orgCode": "JINS","orgName": "THE JUBILEE INSURANCE COMPANY OF KENYA","orgContactPer": "JUBILEE ADMIN","orgContactNo": "0709949000","orgEmail": "talk2usHealth@jubileekenya.com",' &&
+  ' "active": false,"createdBy": 0, "respCode": 200, "wallets": null, "UserGroupId": 3475, "creationType": null }' &&
+']'.
+
+* json to abap
+/ui2/cl_json=>deserialize( EXPORTING
+json = lv_json
+pretty_name = /ui2/cl_json=>pretty_mode-camel_case
+CHANGING
+data = lt_org ).
+
+write: / lv_json.
+write: / lt_org[ 1 ]-orgCode .
