@@ -1,0 +1,148 @@
+*&---------------------------------------------------------------------*
+*& Report ZMCS_JSON_TO_ABAP_2
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZMCS_JSON_TO_ABAP_2.
+
+* data types
+DATA :LV_VARIABLE_01 TYPE CHAR2,
+      LV_VARIABLE_02(4) TYPE  n,
+      LV_VARIABLE_03 TYPE CHAR11.
+
+*
+*{
+*    "success": true,
+*    "data": [ ],
+*    "msg": null
+*}
+
+Types: begin of client,
+id type int4,
+code type string,
+name type string,
+clientStatus type string,
+end of client.
+
+
+Types: begin of diagnosis,
+id type int4,
+icd10Code type string,
+description type string,
+end of diagnosis.
+
+
+Types: begin of items,
+lineItemId type int4,
+unit type string,
+quantity type int4,
+amount type string,
+description type string,
+itemName type string,
+serviceGroup type string,
+end of items.
+
+Types: begin of invoice_s,
+id type int4,
+invoiceNumber type string,
+invoiceDate type string,
+total type string,
+status type string,
+items type items,
+end of invoice_s.
+
+types: Invoices type standard table of Invoice_s with non-unique default key.
+data: invoice_result type Invoices.
+data: wa_invoices like line of invoice_result.
+
+
+Types: begin of claims_s,
+id type int4,
+client type client,
+claimNumber type string,
+providerName type string,
+providerCode type string,
+benefit type string,
+memberNumber type string,
+memberName type string,
+personnelArea type string,
+preAuthNumber type string,
+diagnoses type diagnosis,
+status type string,
+datePicked type string,
+invoices type invoices,
+end of claims_s.
+
+types: claims type standard table of claims_s with non-unique default key.
+data: claims_result type claims.
+data: wa_claims like line of claims_result.
+
+data: itab_header type STANDARD TABLE OF ZTA_MCS_INV_HDR .
+data: wa_header like LINE OF itab_header.
+
+
+Types: begin of t_response,
+success type string,
+data type claims,
+msg type string,
+end of t_response.
+
+TYPES: t_response_map TYPE SORTED TABLE OF t_response.
+DATA: m_response TYPE t_response.
+
+     DATA: response TYPE string.
+
+response =
+ '{ "success": true, "data": [ { "id": 1, "client": { "id": "4b49c56f-1053-4060-860f-d550ce6eabc9", "code": 20, "name": "KENGEN", "clientStatus": "ACTIVE" },' &&
+         ' "claimNumber": "", "providerName": "SONDU MIRIU STAFF CLINIC", "providerCode": "1665", "benefit": "OUTPATIENT OVERALL", "memberNumber": "KG00000-00", "memberName": "KenGen Sample Staff", ' &&
+         ' "personnelArea": "Geothermal", "preAuthNumber": null, "diagnoses": [ { "id": 1, "icd10Code": "B50.9", "description": "Malarial Fever" } ], "status": "PICKED", "datePicked": "2022-09-27", ' &&
+        ' "invoices": [ { "id": 1,  "invoiceNumber": "77777", "invoiceDate": "2022-09-27",  "total": 2500.00, "status": "PENDED", "items": [ { "lineItemId": 3, "unit": 50.00, "quantity": 10, "amount": 500.00, ' &&
+        ' "description": "Anti-malarial", "itemName": "Drugs", "serviceGroup": "General" }, { "lineItemId": 2, "unit": 1500.00, "quantity": 1, "amount": 1500.00, "description": "Lab test", "itemName": "Reagent", ' &&
+         ' "serviceGroup": "General" }, { "lineItemId": 1, "unit": 500.00,  "quantity": 1, "amount": 500.00, "description": "Consultation", "itemName": "OP Consulation", "serviceGroup": "General" } ] } ] },' &&
+      '{ "id": 2, "client": { "id": "4b49c56f-1053-4060-860f-d550ce6eabc9", "code": 20, "name": "KENGEN", "clientStatus": "ACTIVE" }, "claimNumber": "", "providerName": "SONDU MIRIU STAFF CLINIC", "providerCode": "1665",' &&
+      ' "benefit": "OUTPATIENT OVERALL","memberNumber": "KG00000-00","memberName": "KenGen Staff Two","personnelArea": "Geothermal","preAuthNumber": null,"diagnoses": [{"id": 2,"icd10Code": "G43.4",' &&
+       '"description": "Hemiplegic migraine" } ],"status": "PICKED", "datePicked": "2022-09-27", "invoices": [ { "id": 2, "invoiceNumber": "55555", "invoiceDate": "2022-09-26", "total": 1100.00,  "status": "PENDED", ' &&
+       '"items": [ { "lineItemId": 5, "unit": 20.00, "quantity": 30,  "amount": 600.00,  "description": "Painkiller", "itemName": "Panadol", "serviceGroup": "General" }, { "lineItemId": 4, "unit": 500.00, ' &&
+       '"quantity": 1, "amount": 500.00,"description": "Consultation", "itemName": "OP Consulation", "serviceGroup": "General" } ] } ] } ], "msg": null}'.
+
+
+* json to abap
+/ui2/cl_json=>deserialize( EXPORTING
+json = response
+pretty_name = /ui2/cl_json=>pretty_mode-camel_case
+CHANGING
+data = m_response ).
+
+  LOOP AT M_RESPONSE-DATA into wa_claims .
+ LOOP AT WA_CLAIMS-INVOICES into wa_invoices.
+
+           CALL FUNCTION 'ZFM_MCS_INV_HDR_RUNG_SERS'
+              EXPORTING
+                LV_VARIABLE_01 = 'I'
+                LV_VARIABLE_02 = 0000
+             IMPORTING
+              LV_VARIABLE_03  = LV_VARIABLE_03.
+
+WRITE: /  LV_VARIABLE_03.
+
+              WA_HEADER-KGINV = LV_VARIABLE_03.
+              WA_HEADER-INVNO = wa_invoices-invoiceNumber.
+              WA_HEADER-INVDT =  wa_invoices-invoiceDate.
+              WA_HEADER-INVSN = wa_invoices-id.
+              WA_HEADER-AMOUNT = wa_invoices-total.
+              WA_HEADER-LIFNR = wa_claims-providerCode.
+              WA_HEADER-MEMBER_NO = wa_claims-memberNumber.
+              WA_HEADER-GJAHR = SY-DATUM(4).
+              WA_HEADER-INVSN = wa_claims-claimNumber.
+              WA_HEADER-WERKS =  wa_claims-personnelArea.
+              WA_HEADER-INVSTS = '02'.
+              WA_HEADER-INVDAT = SY-DATUM.
+              WA_HEADER-ERDAT = SY-DATUM.
+              WA_HEADER-ERNAM = SY-UNAME.
+              WA_HEADER-STAFF_NO = ''.
+
+  ENDLOOP.
+ modify zta_mcs_inv_hdr from wa_header.
+***              clear wa_header.
+              clear LV_VARIABLE_03.
+  ENDLOOP.
