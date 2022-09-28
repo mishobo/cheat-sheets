@@ -1,34 +1,85 @@
 *&---------------------------------------------------------------------*
-*& Report ZMCS_TEST_API
+*& Report ZMCS_KENGEN_LCT_CLAIMS
 *&---------------------------------------------------------------------*
 *&
 *&---------------------------------------------------------------------*
-REPORT ZMCS_TEST_API.
+REPORT ZMCS_KENGEN_LCT_CLAIMS.
+
 
 TRY.
 
-* declacation of variables and types
-TYPES: BEGIN OF ty_org,
-orgId TYPE int4,
-orgCode TYPE string,
-orgName type string,
-orgContactPer type string,
-orgContactNo type string,
-orgEmail type string,
-active type string,
-createdBy type string,
-respCode type int4,
-wallets type string,
-UserGroupId type string,
-creationType type string,
-END OF ty_org.
+* data types
+DATA :LV_VARIABLE_01 TYPE CHAR2,
+      LV_VARIABLE_02(4) TYPE  n,
+      LV_VARIABLE_03 TYPE CHAR11.
 
-DATA: lt_org type STANDARD TABLE OF ty_org WITH DEFAULT KEY,
-lv_json type string.
+* variable declarations
+Types: begin of client,
+id type int4,
+code type string,
+name type string,
+clientStatus type string,
+end of client.
+
+Types: begin of items,
+lineItemId type int4,
+unit type string,
+quantity type int4,
+amount type string,
+description type string,
+itemName type string,
+serviceGroup type string,
+end of items.
+
+Types: begin of invoice_s,
+id type int4,
+invoiceNumber type string,
+invoiceDate type string,
+total type string,
+status type string,
+items type items,
+end of invoice_s.
+
+types: Invoices type standard table of Invoice_s with non-unique default key.
+data: invoice_result type Invoices.
+data: wa_invoices like line of invoice_result.
+
+Types: begin of claims_s,
+id type int4,
+client type client,
+claimNumber type string,
+providerName type string,
+providerCode type string,
+benefit type string,
+memberNumber type string,
+memberName type string,
+personnelArea type string,
+preAuthNumber type string,
+diagnoses type diagnosis,
+status type string,
+datePicked type string,
+invoices type invoices,
+end of claims_s.
+
+types: claims type standard table of claims_s with non-unique default key.
+data: claims_result type claims.
+data: wa_claims like line of claims_result.
+
+data: itab_header type STANDARD TABLE OF ZTA_MCS_INV_HDR .
+data: wa_header like LINE OF itab_header.
+
+Types: begin of t_response,
+success type string,
+data type claims,
+msg type string,
+end of t_response.
+
+TYPES: t_response_map TYPE SORTED TABLE OF t_response.
+DATA: m_response TYPE t_response.
 
 
 *API URL
-Data(lv_url) = |http://35.241.171.182:8085/compas/rest/organization/gtOrganizations|.
+Data(lv_url) = |http://34.122.191.181/api/v1/staging/claims|.
 DATA: o_client TYPE REF TO if_http_client.
 
 *Create Http Object
@@ -52,12 +103,6 @@ if o_client is bound.
 *set http method
 o_client->request->set_method( if_http_request=>co_request_method_get ).
 
-*set header fields
-*_client->request->set_header_field( name = 'X-RapidAPI-Host' value = 'airport-info.p.rapidapi.com' ).
-
-
-*_client->request->set_header_field( name = 'X-RapidAPI-Key' value = '4660889b0cmsh44e56908c97055fp14edc5jsn06796a193fac' ).
-
 *set timeout
 o_client->send( timeout = if_http_client=>co_timeout_default ).
 
@@ -73,26 +118,51 @@ write: / 'HTTP_STATUS_CODE', lv_http_status.
 write: / 'STATUS_TEXT', lv_status_text.
 
 if lv_http_status = 200.
-lv_json = o_client->response->get_cdata( ).
+Data(lv_json) = o_client->response->get_cdata( ).
+Data(response) = o_client->response->get_cdata( ).
 write: / 'Response:'.
-write: / lv_json .
+write: / response.
 
-*json to abap
-
+* json to abap
 /ui2/cl_json=>deserialize( EXPORTING
-                               json = lv_json
-                               pretty_name = /ui2/cl_json=>pretty_mode-camel_case
-                               CHANGING
-                                    data = lt_org ).
-*show data
+json = response
+pretty_name = /ui2/cl_json=>pretty_mode-camel_case
+CHANGING
+data = m_response ).
 
-write: / lt_org[ 1 ]-orgId .
-write: / lt_org[ 1 ]-orgCode .
-write: / lt_org[ 1 ]-orgName .
-write: / lt_org[ 1 ]-orgContactPer .
-write: / lt_org[ 1 ]-orgContactNo .
-write: / lt_org[ 1 ]-orgEmail .
-write: / lt_org[ 1 ]-respCode .
+  LOOP AT M_RESPONSE-DATA into wa_claims .
+ LOOP AT WA_CLAIMS-INVOICES into wa_invoices.
+
+           CALL FUNCTION 'ZFM_MCS_INV_HDR_RUNG_SERS'
+              EXPORTING
+                LV_VARIABLE_01 = 'I'
+                LV_VARIABLE_02 = 0000
+             IMPORTING
+              LV_VARIABLE_03  = LV_VARIABLE_03.
+
+WRITE: /  LV_VARIABLE_03.
+
+              WA_HEADER-KGINV = LV_VARIABLE_03.
+              WA_HEADER-INVNO = wa_invoices-invoiceNumber.
+              WA_HEADER-INVDT =  wa_invoices-invoiceDate.
+              WA_HEADER-INVSN = wa_invoices-id.
+              WA_HEADER-AMOUNT = wa_invoices-total.
+              WA_HEADER-LIFNR = wa_claims-providerCode.
+              WA_HEADER-MEMBER_NO = wa_claims-memberNumber.
+              WA_HEADER-GJAHR = SY-DATUM(4).
+              WA_HEADER-INVSN = wa_claims-claimNumber.
+              WA_HEADER-WERKS =  wa_claims-personnelArea.
+              WA_HEADER-INVSTS = '02'.
+              WA_HEADER-INVDAT = SY-DATUM.
+              WA_HEADER-ERDAT = SY-DATUM.
+              WA_HEADER-ERNAM = SY-UNAME.
+              WA_HEADER-STAFF_NO = ''.
+
+  ENDLOOP.
+ modify zta_mcs_inv_hdr from wa_header.
+***              clear wa_header.
+              clear LV_VARIABLE_03.
+  ENDLOOP.
 
 
 ENDIF.
@@ -100,6 +170,8 @@ ENDIF.
 *close http connection
 o_client->close( ).
 ENDIF.
+
+
 
 CATCH cx_root INTO DATA(e_txt).
 WRITE: / e_txt->get_text( ).
