@@ -8,3 +8,6 @@ $ mysql -u root -p
 -- installing software in a container
 $ apt-get update
 $ apt-get install nano
+
+-- IMPORTING A DUMP
+$ mountdata \.  C:\Users\habdallah\OneDrive\claims.sql
