@@ -1,0 +1,2 @@
+* new rect app
+$ npx create-react-app react-frontend
