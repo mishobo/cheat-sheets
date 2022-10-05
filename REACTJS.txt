@@ -1,2 +1,4 @@
 * new rect app
 $ npx create-react-app react-frontend
+$ npm run build
+$ npm start
