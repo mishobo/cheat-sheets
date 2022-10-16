@@ -11,3 +11,6 @@ $ apt-get install nano
 
 -- IMPORTING A DUMP
 $ mountdata \.  C:\Users\habdallah\OneDrive\claims.sql
+
+-- Queries
+set foreign_key_checks=0;
