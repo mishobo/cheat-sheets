@@ -1,0 +1,288 @@
+*&---------------------------------------------------------------------*
+*& Report ZMCS_KENGEN_LCT_CLAIMS
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZMCS_KENGEN_LCT_CLAIMS.
+
+
+TRY.
+
+* data types
+DATA :LV_VARIABLE_01 TYPE CHAR2,
+      LV_VARIABLE_02(4) TYPE  n,
+      LV_VARIABLE_03 TYPE CHAR11.
+data lv_number(6) TYPE  n.
+
+Types: begin of diagnosis_s,
+id type int4,
+icd10Code type string,
+description type string,
+end of diagnosis_s.
+
+types: diagnosis type standard table of diagnosis_s with non-unique default key.
+data: diagnosis_result type diagnosis.
+data: wa_diagnosis like line of diagnosis_result .
+data: diagnosis_post type STANDARD TABLE OF zta_mcs_diagnose.
+data: wa_diagnosis_post like line of diagnosis_post.
+
+* variable declarations
+Types: begin of client,
+id type int4,
+code type string,
+name type string,
+clientStatus type string,
+end of client.
+
+Types: begin of items,
+lineItemId type int4,
+unit type string,
+quantity type int4,
+amount type string,
+description type string,
+itemName type string,
+serviceGroup type string,
+end of items.
+
+types: LineItem type standard table of items with non-unique default key.
+data: item_result type LineItem.
+data: wa_LineItem like line of item_result .
+
+Types: begin of invoice_s,
+id type int4,
+invoiceNumber type string,
+invoiceDate type string,
+total type string,
+status type string,
+items type LineItem,
+end of invoice_s.
+
+types: Invoices type standard table of Invoice_s with non-unique default key.
+data: invoice_result type Invoices.
+data: wa_invoices like line of invoice_result.
+
+Types: begin of claims_s,
+id type int4,
+client type client,
+claimNumber type string,
+providerName type string,
+providerCode type string,
+benefit type string,
+memberNumber type string,
+memberName type string,
+personnelArea type string,
+preAuthNumber type string,
+diagnoses type diagnosis,
+status type string,
+datePicked type string,
+invoices type invoices,
+end of claims_s.
+
+types: claims type standard table of claims_s with non-unique default key.
+data: claims_result type claims.
+data: wa_claims like line of claims_result.
+
+data: itab_header type STANDARD TABLE OF ZTA_MCS_INV_HDR .
+data: wa_header like LINE OF itab_header.
+
+data: itab_item type STANDARD TABLE OF ZTA_MCS_INV_ITEM .
+data: wa_item like LINE OF itab_item.
+
+
+Types: begin of t_response,
+success type string,
+data type claims,
+msg type string,
+end of t_response.
+
+TYPES: t_response_map TYPE SORTED TABLE OF t_response.
+DATA: m_response TYPE t_response.
+
+
+*API URL
+Data(lv_url) = |http://34.122.191.181/api/v1/staging/claims|.
+DATA: o_client TYPE REF TO if_http_client.
+
+*Create Http Object
+cl_http_client=>create_by_url(
+EXPORTING
+url = lv_url
+IMPORTING
+client = o_client
+EXCEPTIONS
+argument_not_found = 1
+plugin_not_active = 2
+internal_error = 3
+others = 4 ).
+
+if  sy-subrc <> 0.
+o_client->close( ).
+endif.
+
+if o_client is bound.
+
+*set http method
+o_client->request->set_method( if_http_request=>co_request_method_get ).
+
+*set timeout
+o_client->send( timeout = if_http_client=>co_timeout_default ).
+
+*read response, http_status, payload
+o_client->receive( ).
+Data: lv_http_status type i,
+      lv_status_text type string.
+
+o_client->response->get_status( IMPORTING
+code = lv_http_status
+reason = lv_status_text ).
+write: / 'HTTP_STATUS_CODE', lv_http_status.
+write: / 'STATUS_TEXT', lv_status_text.
+
+if lv_http_status = 200.
+Data(lv_json) = o_client->response->get_cdata( ).
+Data(response) = o_client->response->get_cdata( ).
+write: / 'Response:'.
+write: / response.
+
+* json to abap
+/ui2/cl_json=>deserialize( EXPORTING
+json = response
+pretty_name = /ui2/cl_json=>pretty_mode-camel_case
+CHANGING
+data = m_response ).
+
+
+LOOP AT M_RESPONSE-DATA into wa_claims .
+LOOP AT WA_CLAIMS-INVOICES into wa_invoices.
+
+CALL FUNCTION 'ZFM_MCS_INV_HDR_RUNG_SERS'
+EXPORTING
+LV_VARIABLE_01 = 'I'
+LV_VARIABLE_02 = 0000
+IMPORTING
+LV_VARIABLE_03  = LV_VARIABLE_03.
+
+WRITE: /  LV_VARIABLE_03.
+
+WRITE: / wa_invoices-invoiceDate.
+
+
+DATA :
+ld_text(20) TYPE c,
+ld_date TYPE datum.
+ld_text =  wa_invoices-invoiceDate.
+REPLACE ALL OCCURRENCES OF
+'.' IN ld_text WITH ''.
+WRITE ld_text TO ld_date.
+
+WRITE ld_date.
+
+
+              WA_HEADER-KGINV = LV_VARIABLE_03.
+              WA_HEADER-INVNO = wa_invoices-invoiceNumber.
+              WA_HEADER-INVDT =   ld_date.
+              WA_HEADER-INVSN = wa_invoices-id.
+              WA_HEADER-AMOUNT = wa_invoices-total.
+              WA_HEADER-LIFNR = wa_claims-providerCode.
+              WA_HEADER-MEMBER_NO = wa_claims-memberNumber.
+              WA_HEADER-GJAHR = SY-DATUM(4).
+              WA_HEADER-INVSN = wa_claims-id.
+              WA_HEADER-WERKS =  wa_claims-personnelArea.
+              WA_HEADER-INVSTS = '02'.
+              WA_HEADER-INVDAT = SY-DATUM.
+              WA_HEADER-ERDAT = SY-DATUM.
+              WA_HEADER-ERNAM = SY-UNAME.
+              WA_HEADER-STAFF_NO = ''.
+
+WRITE: /  wa_invoices-invoiceNumber.
+
+          LOOP AT WA_INVOICES-ITEMS INTO  wa_LineItem.
+
+             CALL FUNCTION 'NUMBER_GET_NEXT'
+              EXPORTING
+                nr_range_nr = '01'
+               object      = 'ZNR_MCS_IN'
+             IMPORTING
+              number      = lv_number.
+
+write: / lv_number.
+
+                wa_item-REC_ID = lv_number.
+                wa_item-KGINV = LV_VARIABLE_03.
+                wa_item-GJAHR = SY-DATUM(4).
+                wa_item-ITEM_ID = wa_LineItem-lineItemId.
+                wa_item-PROV_ITEM_CODE = ''.
+                wa_item-PROV_ITEM_NAME =  wa_LineItem-description.
+                wa_item-SERVICE_GROUP = wa_LineItem-serviceGroup.
+                wa_item-BEN_NAME = WA_CLAIMS-memberName.
+                wa_item-VISDT = wa_invoices-invoiceDate.
+                wa_item-QUANTITY = wa_LineItem-quantity.
+                wa_item-AMOUNT = wa_LineItem-amount.
+                wa_item-payer_group_code = ''.
+                wa_item-payer_item_name =  wa_LineItem-itemName.
+                wa_item-payer_item_code = ''.
+                wa_item-payer_group_name = ''.
+                wa_item-LINTYP = '11'.
+*insert header and item.
+                modify zta_mcs_inv_item from wa_item.
+                clear wa_item.
+                clear wa_LineItem.
+
+              ENDLOOP.
+
+              modify zta_mcs_inv_hdr from wa_header.
+              clear lv_number.
+***              clear wa_header.
+              clear LV_VARIABLE_03.
+
+  ENDLOOP.
+
+           LOOP AT WA_CLAIMS-DIAGNOSES into wa_diagnosis.
+              CALL FUNCTION 'NUMBER_GET_NEXT'
+              EXPORTING
+                nr_range_nr = '01'
+               object      = 'ZNR_MCS_IN'
+             IMPORTING
+              number      = lv_number.
+
+write: / lv_number.
+
+              wa_diagnosis_post-REC_ID = lv_number.
+              wa_diagnosis_post-CLAIM_ID =  wa_claims-id.
+              wa_diagnosis_post-DIAGNOSIS_ID = wa_diagnosis-id.
+              wa_diagnosis_post-MEM_NUMBER = wa_claims-memberNumber.
+              wa_diagnosis_post-CODING_STANDARD = 'ICD11'.
+              wa_diagnosis_post-CODE =  wa_diagnosis-icd10Code.
+              wa_diagnosis_post-NAME = wa_diagnosis-description.
+              wa_diagnosis_post-IS_PRIMARY = ''.
+              wa_diagnosis_post-VISDT = wa_invoices-invoiceDate.
+              wa_diagnosis_post-PICKED_STATUS = 0.
+
+              modify zta_mcs_diagnose from wa_diagnosis_post.
+              clear wa_diagnosis_post.
+              clear wa_diagnosis.
+              clear lv_number.
+
+              ENDLOOP.
+              clear WA_CLAIMS-DIAGNOSES.
+
+
+
+
+ modify zta_mcs_inv_hdr from wa_header.
+***              clear wa_header.
+              clear LV_VARIABLE_03.
+  ENDLOOP.
+
+
+ENDIF.
+
+*close http connection
+o_client->close( ).
+ENDIF.
+
+
+
+CATCH cx_root INTO DATA(e_txt).
+WRITE: / e_txt->get_text( ).
+ENDTRY.
