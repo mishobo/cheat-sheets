@@ -213,13 +213,13 @@ write: / lv_number.
                 wa_item-ITEM_ID = wa_LineItem-lineItemId.
                 wa_item-PROV_ITEM_CODE = ''.
                 wa_item-PROV_ITEM_NAME =  wa_LineItem-description.
-                wa_item-SERVICE_GROUP = wa_LineItem-serviceGroup.
+                wa_item-SERVICE_GROUP =  wa_LineItem-itemName.
                 wa_item-BEN_NAME = WA_CLAIMS-memberName.
                 wa_item-VISDT = wa_invoices-invoiceDate.
                 wa_item-QUANTITY = wa_LineItem-quantity.
                 wa_item-AMOUNT = wa_LineItem-amount.
                 wa_item-payer_group_code = ''.
-                wa_item-payer_item_name =  wa_LineItem-itemName.
+                wa_item-payer_item_name = wa_LineItem-serviceGroup.
                 wa_item-payer_item_code = ''.
                 wa_item-payer_group_name = ''.
                 wa_item-LINTYP = '11'.
