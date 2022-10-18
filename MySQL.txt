@@ -14,3 +14,9 @@ $ mountdata \.  C:\Users\habdallah\OneDrive\claims.sql
 
 -- Queries
 set foreign_key_checks=0;
+
+-- duplicate records
+SELECT invoice_number, COUNT(invoice_number)
+FROM invoice
+GROUP BY invoice_number
+HAVING COUNT(invoice_number) > 1;
