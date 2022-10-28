@@ -100,7 +100,14 @@ DATA: m_response TYPE t_response.
 
 
 *API URL
-Data(lv_url) = |http://34.122.191.181/api/v1/staging/claims|.
+IF SY-MANDT = 200.
+Data(lv_url) = |http://34.122.191.181/api/v1/staging/claim/payer/4b49c56f-1053-4060-860f-d550ce6eabc9|.
+ELSEIF SY-MANDT = 500.
+Data(lv_url) = |http://34.122.191.181/api/v1/staging/claim/payer/4b49c56f-1053-4060-860f-d550ce6eabc9|.
+ELSEIF SY-MANDT = 600.
+Data(lv_url) = |http://34.122.191.181/api/v1/staging/claim/payer/4b49c56f-1053-4060-860f-d550ce6eabc9|.
+ENDIF.
+
 DATA: o_client TYPE REF TO if_http_client.
 
 *Create Http Object
@@ -135,14 +142,14 @@ Data: lv_http_status type i,
 o_client->response->get_status( IMPORTING
 code = lv_http_status
 reason = lv_status_text ).
-write: / 'HTTP_STATUS_CODE', lv_http_status.
-write: / 'STATUS_TEXT', lv_status_text.
+*write: / 'HTTP_STATUS_CODE', lv_http_status.
+*write: / 'STATUS_TEXT', lv_status_text.
 
 if lv_http_status = 200.
 Data(lv_json) = o_client->response->get_cdata( ).
 Data(response) = o_client->response->get_cdata( ).
-write: / 'Response:'.
-write: / response.
+*write: / 'Response:'.
+*write: / response.
 
 * json to abap
 /ui2/cl_json=>deserialize( EXPORTING
@@ -162,9 +169,9 @@ LV_VARIABLE_02 = 0000
 IMPORTING
 LV_VARIABLE_03  = LV_VARIABLE_03.
 
-WRITE: /  LV_VARIABLE_03.
-
-WRITE: / wa_invoices-invoiceDate.
+*WRITE: /  LV_VARIABLE_03.
+*
+*WRITE: / wa_invoices-invoiceDate.
 
 
 DATA :
@@ -175,7 +182,7 @@ REPLACE ALL OCCURRENCES OF
 '.' IN ld_text WITH ''.
 WRITE ld_text TO ld_date.
 
-WRITE ld_date.
+**WRITE ld_date.
 
 
               WA_HEADER-KGINV = LV_VARIABLE_03.
@@ -194,7 +201,7 @@ WRITE ld_date.
               WA_HEADER-ERNAM = SY-UNAME.
               WA_HEADER-STAFF_NO = ''.
 
-WRITE: /  wa_invoices-invoiceNumber.
+*WRITE: /  wa_invoices-invoiceNumber.
 
           LOOP AT WA_INVOICES-ITEMS INTO  wa_LineItem.
 
@@ -205,7 +212,7 @@ WRITE: /  wa_invoices-invoiceNumber.
              IMPORTING
               number      = lv_number.
 
-write: / lv_number.
+*write: / lv_number.
 
                 wa_item-REC_ID = lv_number.
                 wa_item-KGINV = LV_VARIABLE_03.
@@ -245,7 +252,7 @@ write: / lv_number.
              IMPORTING
               number      = lv_number.
 
-write: / lv_number.
+*write: / lv_number.
 
               wa_diagnosis_post-REC_ID = lv_number.
               wa_diagnosis_post-CLAIM_ID =  wa_claims-id.
