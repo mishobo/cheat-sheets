@@ -14,6 +14,7 @@ $ mountdata \.  C:\Users\habdallah\OneDrive\claims.sql
 
 -- Queries
 set foreign_key_checks=0;
+show create table visit;
 
 -- duplicate records
 SELECT invoice_number, COUNT(invoice_number)
