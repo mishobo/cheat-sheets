@@ -11,8 +11,20 @@ TRY.
 * data types
 DATA :LV_VARIABLE_01 TYPE CHAR2,
       LV_VARIABLE_02(4) TYPE  n,
-      LV_VARIABLE_03 TYPE CHAR11.
+      LV_VARIABLE_03 TYPE CHAR11,
+      subStringMemberNo TYPE string,
+      personnelCode type I,
+      personnelCode1 type I VALUE 1000,
+      personnelCode2 type I VALUE 1100,
+      personnelCode3 type I VALUE 1200,
+      personnelCode4 type I VALUE 1300,
+      personnelCode5 type I VALUE 1400.
+
 data lv_number(6) TYPE  n.
+
+
+
+DATA lv_url TYPE string.
 
 Types: begin of diagnosis_s,
 id type int4,
@@ -100,12 +112,12 @@ DATA: m_response TYPE t_response.
 
 
 *API URL
-IF SY-MANDT = 200.
-Data(lv_url) = |http://34.122.191.181/api/v1/staging/claim/payer/4b49c56f-1053-4060-860f-d550ce6eabc9|.
-ELSEIF SY-MANDT = 500.
-Data(lv_url) = |http://34.122.191.181/api/v1/staging/claim/payer/4b49c56f-1053-4060-860f-d550ce6eabc9|.
-ELSEIF SY-MANDT = 600.
-Data(lv_url) = |http://34.122.191.181/api/v1/staging/claim/payer/4b49c56f-1053-4060-860f-d550ce6eabc9|.
+IF SY-SYSID = 'KGD'.
+lv_url = |http://34.122.191.181/api/v1/staging/claim/payer/4b49c56f-1053-4060-860f-d550ce6eabc9|.
+ELSEIF SY-SYSID = 'KGQ'.
+lv_url = |http://test-apigateway.lctafrica.net/api/v1/staging/claim/payer/92de82fe-50f2-4996-a6c6-a2e78338ea26|.
+ELSEIF SY-SYSID = 'KGP'.
+lv_url = |http://34.122.191.181/api/v1/staging/claim/payer/4b49c56f-1053-4060-860f-d550ce6eabc9|.
 ENDIF.
 
 DATA: o_client TYPE REF TO if_http_client.
@@ -185,16 +197,33 @@ WRITE ld_text TO ld_date.
 **WRITE ld_date.
 
 
+
+IF wa_claims-personnelArea = 'Central Office'.
+personnelCode = personnelCode1.
+ELSEIF wa_claims-personnelArea = 'Thermal'.
+ personnelCode = personnelCode2.
+ELSEIF wa_claims-personnelArea = 'Western Hydros'.
+  personnelCode = personnelCode3.
+ELSEIF wa_claims-personnelArea = 'Eastern Hydros'.
+  personnelCode = personnelCode4.
+ELSEIF wa_claims-personnelArea = 'Geothermal'.
+  personnelCode = personnelCode5.
+ENDIF.
+
+CONCATENATE '0000' wa_claims-providerCode INTO vendorCode.
+
+subStringMemberNo = substring_after( val = wa_claims-memberNumber sub = 'KG').
+
               WA_HEADER-KGINV = LV_VARIABLE_03.
               WA_HEADER-INVNO = wa_invoices-invoiceNumber.
               WA_HEADER-INVDT =   ld_date.
               WA_HEADER-INVSN = wa_invoices-id.
               WA_HEADER-AMOUNT = wa_invoices-total.
-              WA_HEADER-LIFNR = wa_claims-providerCode.
-              WA_HEADER-MEMBER_NO = wa_claims-memberNumber.
+              WA_HEADER-LIFNR = vendorCode.
+              WA_HEADER-MEMBER_NO = subStringMemberNo.
               WA_HEADER-GJAHR = SY-DATUM(4).
               WA_HEADER-INVSN = wa_claims-id.
-              WA_HEADER-WERKS =  wa_claims-personnelArea.
+              WA_HEADER-WERKS =  personnelCode.
               WA_HEADER-INVSTS = '02'.
               WA_HEADER-INVDAT = SY-DATUM.
               WA_HEADER-ERDAT = SY-DATUM.
