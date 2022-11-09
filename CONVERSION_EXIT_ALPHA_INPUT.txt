@@ -1,0 +1,13 @@
+FUNCTION CONVERSION_EXIT_ALPHA_INPUT.
+*"----------------------------------------------------------------------
+*"*"Lokale Schnittstelle:
+*"  IMPORTING
+*"     VALUE(INPUT) TYPE  CLIKE
+*"  EXPORTING
+*"     VALUE(OUTPUT) TYPE  CLIKE
+*"----------------------------------------------------------------------
+
+  CALL 'CONVERSION_EXIT_ALPHA_INPUT'  ID 'INPUT'  FIELD INPUT
+                                      ID 'OUTPUT' FIELD OUTPUT.
+
+ENDFUNCTION.
