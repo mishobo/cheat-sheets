@@ -1,0 +1,11 @@
+-- list images
+$ docker images
+
+-- list all containers
+$ docker ps -a
+
+-- removing dangling images
+$ docker image prune
+
+-- removing unused containers, images, networks and the entire build cache
+$ docker system prune -a
