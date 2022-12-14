@@ -1,0 +1,8 @@
+-- to see previous commits
+$ git log --oneline
+
+-- to restore a file on work repo to the head
+$ git restore <filePath>
+
+--restore file to a previous hash value
+$ git checkout <hash value> <filePath>
