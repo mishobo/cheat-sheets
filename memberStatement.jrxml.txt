@@ -1,0 +1,482 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.12.2.final using JasperReports Library version 3.7.5  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="grouped_transactions" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="1.610510000000001"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="357"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="643"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="V2-localhost-db"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<subDataset name="Dataset1">
+		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="V2-localhost-db"/>
+		<queryString language="SQL">
+			<![CDATA[SELECT v.visit_number as visitNumber, i.invoice_number as invoiceNumber, i.total_amount as totalAmount, v.aggregate_id as aggregateId, v.benefit_id as benefitId, v.benefit_name as benefitName, 
+v.category_id as categoryId, v.created_at as createdAt, v.hospital_provider_id as providerId, v.member_name as memberName, v.member_number as memberNumber, v.status
+FROM claims.visit v inner join claims.invoice i on i.visit_number = v.visit_number where v.status != 'REJECTED' and v.aggregate_id = 'eedcec41-d56b-4863-ac57-39485d428621' order by v.visit_number desc
+]]>
+		</queryString>
+		<field name="visitNumber" class="java.lang.Long">
+			<property name="com.jaspersoft.studio.field.label" value="visitNumber"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="visit"/>
+		</field>
+		<field name="invoiceNumber" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="invoiceNumber"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="invoice"/>
+		</field>
+		<field name="totalAmount" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.label" value="totalAmount"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="invoice"/>
+		</field>
+		<field name="aggregateId" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="aggregateId"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="visit"/>
+		</field>
+		<field name="benefitId" class="java.lang.Long">
+			<property name="com.jaspersoft.studio.field.label" value="benefitId"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="visit"/>
+		</field>
+		<field name="benefitName" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="benefitName"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="visit"/>
+		</field>
+		<field name="categoryId" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="categoryId"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="visit"/>
+		</field>
+		<field name="createdAt" class="java.sql.Timestamp">
+			<property name="com.jaspersoft.studio.field.label" value="createdAt"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="visit"/>
+		</field>
+		<field name="providerId" class="java.lang.Long">
+			<property name="com.jaspersoft.studio.field.label" value="providerId"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="visit"/>
+		</field>
+		<field name="memberName" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="memberName"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="visit"/>
+		</field>
+		<field name="memberNumber" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="memberNumber"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="visit"/>
+		</field>
+		<field name="status" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="status"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="visit"/>
+		</field>
+	</subDataset>
+	<queryString language="SQL">
+		<![CDATA[select bb.aggregate_id as aggregateId , bb.benefit_name as benefitName, bb.catalog_id as catalogId,bb.initial_limit as initialLimit, bb.start_date as fromDate, bb.end_date as toDate
+from claims.benefit_beneficiary bb where bb.catalog_id = 0 and bb.status = 'ACTIVE' and bb.member_number = '28609892-00' order by bb.benefit_id asc]]>
+	</queryString>
+	<field name="aggregateId" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="member_name"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="visit"/>
+	</field>
+	<field name="benefitName" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="provider_name"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="visit"/>
+	</field>
+	<field name="fromDate" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="created_at"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="visit"/>
+	</field>
+	<field name="toDate" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="created_at"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="visit"/>
+	</field>
+	<field name="initialLimit" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="initial_limit"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="visit"/>
+	</field>
+	<sortField name="benefitName" order="Descending"/>
+	<variable name="Grp_SUM" class="java.math.BigDecimal" resetType="Group" resetGroup="GroupService" calculation="Sum">
+		<variableExpression><![CDATA[]]></variableExpression>
+	</variable>
+	<variable name="Grp_MINUS" class="java.math.BigDecimal" resetType="Group" resetGroup="GroupService">
+		<variableExpression><![CDATA[$F{initialLimit}.subtract($V{Grp_SUM} )]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<group name="GroupService">
+		<groupExpression><![CDATA[$F{benefitName}]]></groupExpression>
+		<groupHeader>
+			<band height="36">
+				<rectangle>
+					<reportElement x="10" y="0" width="770" height="34"/>
+				</rectangle>
+				<staticText>
+					<reportElement x="15" y="15" width="64" height="19">
+						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="73638b31-d1c2-47c7-b396-d35ddd4d173f"/>
+						<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					</reportElement>
+					<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+						<font fontName="Century Gothic" size="6" isBold="true"/>
+					</textElement>
+					<text><![CDATA[INVOICE DATE]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="80" y="15" width="153" height="19">
+						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="fde795e8-ab01-41e1-83a1-50513e607f86"/>
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+						<property name="com.jaspersoft.studio.unit.y" value="px"/>
+						<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					</reportElement>
+					<textElement verticalAlignment="Middle" lineSpacing="Single">
+						<font fontName="Century Gothic" size="6" isBold="true"/>
+					</textElement>
+					<text><![CDATA[SERVICE PROVIDER]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="240" y="15" width="139" height="19">
+						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9f51aef9-cb51-479a-91ee-d8d936f05bba"/>
+						<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					</reportElement>
+					<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+						<font fontName="Century Gothic" size="6" isBold="true"/>
+					</textElement>
+					<text><![CDATA[INVOICE NUMBER]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="510" y="15" width="101" height="19">
+						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c4d09c16-c208-43f3-b9a2-6afdc7db35b9"/>
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+						<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					</reportElement>
+					<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+						<font fontName="Century Gothic" size="6" isBold="true"/>
+					</textElement>
+					<text><![CDATA[MEMBER NAME]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="610" y="15" width="100" height="19">
+						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="bc3d8958-d7ab-4f41-8b07-9d8f9efc8e31"/>
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+						<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					</reportElement>
+					<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
+						<font fontName="Century Gothic" size="6" isBold="true"/>
+					</textElement>
+					<text><![CDATA[MEMBER NUMBER]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="710" y="15" width="61" height="19">
+						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9af74d62-3cdf-48bd-ac82-7e7da8d5fcde"/>
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+						<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					</reportElement>
+					<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
+						<font fontName="Century Gothic" size="6" isBold="true"/>
+					</textElement>
+					<text><![CDATA[AMOUNT]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="250" y="0" width="300" height="15">
+						<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+						<font fontName="Century Gothic" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{benefitName}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="630" y="0" width="75" height="15">
+						<property name="com.jaspersoft.studio.unit.y" value="px"/>
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
+						<font fontName="Century Gothic" size="6" isBold="true"/>
+					</textElement>
+					<text><![CDATA[ALLOCATION :]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="700" y="0" width="71" height="15">
+						<property name="com.jaspersoft.studio.unit.x" value="px"/>
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
+						<font fontName="Century Gothic" size="6" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{initialLimit}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="380" y="15" width="129" height="19">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+						<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					</reportElement>
+					<textElement verticalAlignment="Middle" lineSpacing="Single">
+						<font fontName="Century Gothic" size="6" isBold="true"/>
+					</textElement>
+					<text><![CDATA[BENEFIT]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="45">
+				<rectangle>
+					<reportElement x="580" y="0" width="200" height="27"/>
+					<graphicElement>
+						<pen lineWidth="1.0" lineStyle="Solid"/>
+					</graphicElement>
+				</rectangle>
+				<staticText>
+					<reportElement x="590" y="0" width="90" height="15">
+						<property name="com.jaspersoft.studio.unit.y" value="px"/>
+						<property name="com.jaspersoft.studio.unit.x" value="px"/>
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
+						<font fontName="Century Gothic" size="6" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Total Utilization]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="680" y="15" width="91" height="12">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+						<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					</reportElement>
+					<textElement textAlignment="Right" lineSpacing="Single">
+						<font fontName="Century Gothic" size="6"/>
+					</textElement>
+				</textField>
+				<staticText>
+					<reportElement x="590" y="15" width="90" height="12">
+						<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					</reportElement>
+					<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
+						<font fontName="Century Gothic" size="6" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Balance ]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="680" y="0" width="90" height="15">
+						<property name="com.jaspersoft.studio.unit.x" value="px"/>
+						<property name="com.jaspersoft.studio.unit.y" value="px"/>
+						<property name="com.jaspersoft.studio.unit.width" value="px"/>
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
+						<font fontName="Century Gothic" size="6"/>
+					</textElement>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="49" splitType="Stretch">
+			<staticText>
+				<reportElement x="1" y="0" width="800" height="49"/>
+				<textElement lineSpacing="Single">
+					<font fontName="Century Gothic" size="8"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<image>
+				<reportElement x="380" y="0" width="100" height="49"/>
+				<imageExpression class="java.lang.String"><![CDATA["https://user-images.githubusercontent.com/60912349/188652731-63ff53de-1e18-4e64-9cce-9963dce9a9d5.png"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="22" splitType="Stretch">
+			<textField>
+				<reportElement x="79" y="0" width="180" height="15">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Century Gothic" size="6" isBold="true"/>
+				</textElement>
+			</textField>
+			<staticText>
+				<reportElement x="10" y="0" width="69" height="15">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Century Gothic" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SCHEME :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="619" y="0" width="71" height="21">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Century Gothic" size="6" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{fromDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="700" y="0" width="71" height="21">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Century Gothic" size="6" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{toDate}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="560" y="0" width="59" height="22">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Century Gothic" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Policy Period:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="380" y="0" width="100" height="15">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Century Gothic" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[FAMILY STATEMENT]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<componentElement>
+				<reportElement x="10" y="0" width="770" height="20">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="Dataset1">
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:listContents height="20" width="770">
+						<textField>
+							<reportElement x="230" y="0" width="130" height="15">
+								<property name="com.jaspersoft.studio.unit.height" value="px"/>
+								<property name="com.jaspersoft.studio.unit.x" value="px"/>
+							</reportElement>
+							<textElement verticalAlignment="Middle" lineSpacing="Single">
+								<font fontName="Century Gothic" size="6"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{invoiceNumber}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="700" y="0" width="60" height="15">
+								<property name="com.jaspersoft.studio.unit.height" value="px"/>
+							</reportElement>
+							<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
+								<font fontName="Century Gothic" size="6"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{totalAmount}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="360" y="0" width="138" height="15">
+								<property name="com.jaspersoft.studio.unit.height" value="px"/>
+							</reportElement>
+							<textElement verticalAlignment="Middle" lineSpacing="Single">
+								<font fontName="Century Gothic" size="6"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{benefitName}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="10" y="0" width="70" height="15">
+								<property name="com.jaspersoft.studio.unit.height" value="px"/>
+							</reportElement>
+							<textElement verticalAlignment="Middle" lineSpacing="Single">
+								<font fontName="Century Gothic" size="6"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{createdAt}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="80" y="0" width="128" height="15">
+								<property name="com.jaspersoft.studio.unit.height" value="px"/>
+								<property name="com.jaspersoft.studio.unit.x" value="px"/>
+							</reportElement>
+							<textElement verticalAlignment="Middle" lineSpacing="Single">
+								<font fontName="Century Gothic" size="6"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{providerId}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="500" y="0" width="100" height="15">
+								<property name="com.jaspersoft.studio.unit.height" value="px"/>
+							</reportElement>
+							<textElement verticalAlignment="Middle" lineSpacing="Single">
+								<font fontName="Century Gothic" size="6"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{memberName}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="600" y="0" width="100" height="15">
+								<property name="com.jaspersoft.studio.unit.height" value="px"/>
+							</reportElement>
+							<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
+								<font fontName="Century Gothic" size="6"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{memberNumber}]]></textFieldExpression>
+						</textField>
+						<line>
+							<reportElement x="10" y="15" width="760" height="1">
+								<property name="com.jaspersoft.studio.unit.width" value="px"/>
+								<property name="com.jaspersoft.studio.unit.x" value="px"/>
+							</reportElement>
+							<graphicElement>
+								<pen lineStyle="Dashed"/>
+							</graphicElement>
+						</line>
+					</jr:listContents>
+				</jr:list>
+			</componentElement>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="76" splitType="Stretch">
+			<textField>
+				<reportElement x="680" y="0" width="100" height="18">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right" lineSpacing="Single">
+					<font fontName="Century Gothic" size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Transparent" x="3" y="0" width="60" height="18" forecolor="#000000" backcolor="#FFFFFF">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" lineSpacing="Single" markup="none">
+					<font fontName="Century Gothic" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[PRINTED AT:]]></text>
+			</staticText>
+			<textField pattern="yyyy.MMMMM.dd GGG hh:mm aaa">
+				<reportElement mode="Transparent" x="73" y="0" width="160" height="18" forecolor="#000000" backcolor="#FFFFFF">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle" rotation="None" lineSpacing="Single" markup="none">
+					<font fontName="Century Gothic" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="45" splitType="Stretch"/>
+	</summary>
+</jasperReport>
