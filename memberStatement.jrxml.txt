@@ -21,9 +21,8 @@
 		<parameter name="Parameter1" class="java.lang.String"/>
 		<queryString language="SQL">
 			<![CDATA[SELECT v.visit_number as visitNumber, i.invoice_number as invoiceNumber, i.total_amount as totalAmount, v.aggregate_id as aggregateId, v.benefit_id as benefitId, v.benefit_name as benefitName, 
-v.category_id as categoryId, v.created_at as createdAt, v.hospital_provider_id as providerId, v.member_name as memberName, v.member_number as memberNumber, v.status
-FROM claims.visit v inner join claims.invoice i on i.visit_number = v.visit_number where v.status != 'REJECTED' and v.aggregate_id = $P{Parameter1}  order by v.visit_number desc
-]]>
+v.category_id as categoryId, v.created_at as createdAt, p.provider_name as providerName, v.member_name as memberName, v.member_number as memberNumber, v.status
+FROM claims.visit v inner join claims.invoice i on i.visit_number = v.visit_number inner join membership.provider p on p.provider_id = v.hospital_provider_id where v.status != 'REJECTED' and v.aggregate_id = $P{Parameter1}  order by v.visit_number desc]]>
 		</queryString>
 		<field name="visitNumber" class="java.lang.Long">
 			<property name="com.jaspersoft.studio.field.label" value="visitNumber"/>
@@ -57,7 +56,7 @@ FROM claims.visit v inner join claims.invoice i on i.visit_number = v.visit_numb
 			<property name="com.jaspersoft.studio.field.label" value="createdAt"/>
 			<property name="com.jaspersoft.studio.field.tree.path" value="visit"/>
 		</field>
-		<field name="providerId" class="java.lang.Long">
+		<field name="providerName" class="java.lang.String">
 			<property name="com.jaspersoft.studio.field.label" value="providerId"/>
 			<property name="com.jaspersoft.studio.field.tree.path" value="visit"/>
 		</field>
@@ -75,12 +74,18 @@ FROM claims.visit v inner join claims.invoice i on i.visit_number = v.visit_numb
 		</field>
 	</subDataset>
 	<queryString language="SQL">
-		<![CDATA[select bb.aggregate_id as aggregateId , bb.benefit_name as benefitName, bb.catalog_id as catalogId,bb.initial_limit as initialLimit, bb.start_date as fromDate, bb.end_date as toDate
+		<![CDATA[select bb.aggregate_id as aggregateId , bb.benefit_name as benefitName, bb.catalog_id as catalogId,bb.initial_limit as initialLimit, bb.start_date as fromDate, bb.end_date as toDate,
+( select p.plan_name from membership.plan p where p.plan_id = (select p.plan_id from membership.policy p where p.policy_id =  (select c.policy_id from membership.category c where c.category_id = bb.category_id))) 
+as planName
 from claims.benefit_beneficiary bb where bb.catalog_id = 0 and bb.status = 'ACTIVE' and bb.member_number = '28609892-00' order by bb.benefit_id asc]]>
 	</queryString>
 	<field name="aggregateId" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.label" value="member_name"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="visit"/>
+	</field>
+	<field name="planName" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value=""/>
+		<property name="com.jaspersoft.studio.field.tree.path" value=""/>
 	</field>
 	<field name="benefitName" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.label" value="provider_name"/>
@@ -301,6 +306,7 @@ from claims.benefit_beneficiary bb where bb.catalog_id = 0 and bb.status = 'ACTI
 				<textElement verticalAlignment="Middle" lineSpacing="Single">
 					<font fontName="Century Gothic" size="6" isBold="true"/>
 				</textElement>
+				<textFieldExpression class=""><![CDATA[$F{planName}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="10" y="0" width="69" height="15">
@@ -361,7 +367,7 @@ from claims.benefit_beneficiary bb where bb.catalog_id = 0 and bb.status = 'ACTI
 				<reportElement x="10" y="0" width="770" height="20">
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 				</reportElement>
-				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
 					<datasetRun subDataset="Dataset1">
 						<datasetParameter name="Parameter1">
 							<datasetParameterExpression><![CDATA[$F{aggregateId}]]></datasetParameterExpression>
@@ -377,7 +383,7 @@ from claims.benefit_beneficiary bb where bb.catalog_id = 0 and bb.status = 'ACTI
 							<textElement verticalAlignment="Middle" lineSpacing="Single">
 								<font fontName="Century Gothic" size="6"/>
 							</textElement>
-							<textFieldExpression><![CDATA[$F{invoiceNumber}]]></textFieldExpression>
+							<textFieldExpression class="java.lang.String"><![CDATA[$F{invoiceNumber}]]></textFieldExpression>
 						</textField>
 						<textField>
 							<reportElement x="700" y="0" width="60" height="15">
@@ -386,7 +392,7 @@ from claims.benefit_beneficiary bb where bb.catalog_id = 0 and bb.status = 'ACTI
 							<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
 								<font fontName="Century Gothic" size="6"/>
 							</textElement>
-							<textFieldExpression><![CDATA[$F{totalAmount}]]></textFieldExpression>
+							<textFieldExpression class="java.lang.String"><![CDATA[$F{totalAmount}]]></textFieldExpression>
 						</textField>
 						<textField>
 							<reportElement x="360" y="0" width="138" height="15">
@@ -395,7 +401,7 @@ from claims.benefit_beneficiary bb where bb.catalog_id = 0 and bb.status = 'ACTI
 							<textElement verticalAlignment="Middle" lineSpacing="Single">
 								<font fontName="Century Gothic" size="6"/>
 							</textElement>
-							<textFieldExpression><![CDATA[$F{benefitName}]]></textFieldExpression>
+							<textFieldExpression class="java.lang.String"><![CDATA[$F{benefitName}]]></textFieldExpression>
 						</textField>
 						<textField>
 							<reportElement x="10" y="0" width="70" height="15">
@@ -404,7 +410,7 @@ from claims.benefit_beneficiary bb where bb.catalog_id = 0 and bb.status = 'ACTI
 							<textElement verticalAlignment="Middle" lineSpacing="Single">
 								<font fontName="Century Gothic" size="6"/>
 							</textElement>
-							<textFieldExpression><![CDATA[$F{createdAt}]]></textFieldExpression>
+							<textFieldExpression class="java.lang.String"><![CDATA[$F{createdAt}]]></textFieldExpression>
 						</textField>
 						<textField>
 							<reportElement x="80" y="0" width="128" height="15">
@@ -414,7 +420,7 @@ from claims.benefit_beneficiary bb where bb.catalog_id = 0 and bb.status = 'ACTI
 							<textElement verticalAlignment="Middle" lineSpacing="Single">
 								<font fontName="Century Gothic" size="6"/>
 							</textElement>
-							<textFieldExpression><![CDATA[$F{providerId}]]></textFieldExpression>
+							<textFieldExpression class="java.lang.String"><![CDATA[$F{providerName}]]></textFieldExpression>
 						</textField>
 						<textField>
 							<reportElement x="500" y="0" width="100" height="15">
@@ -423,7 +429,7 @@ from claims.benefit_beneficiary bb where bb.catalog_id = 0 and bb.status = 'ACTI
 							<textElement verticalAlignment="Middle" lineSpacing="Single">
 								<font fontName="Century Gothic" size="6"/>
 							</textElement>
-							<textFieldExpression><![CDATA[$F{memberName}]]></textFieldExpression>
+							<textFieldExpression class="java.lang.String"><![CDATA[$F{memberName}.toUpperCase()]]></textFieldExpression>
 						</textField>
 						<textField>
 							<reportElement x="600" y="0" width="100" height="15">
@@ -432,7 +438,7 @@ from claims.benefit_beneficiary bb where bb.catalog_id = 0 and bb.status = 'ACTI
 							<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
 								<font fontName="Century Gothic" size="6"/>
 							</textElement>
-							<textFieldExpression><![CDATA[$F{memberNumber}]]></textFieldExpression>
+							<textFieldExpression class="java.lang.String"><![CDATA[$F{memberNumber}]]></textFieldExpression>
 						</textField>
 						<line>
 							<reportElement x="10" y="15" width="760" height="1">
