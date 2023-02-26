@@ -16,10 +16,13 @@
 	<subDataset name="Dataset1">
 		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="V2-localhost-db"/>
+		<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="315"/>
+		<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="680"/>
+		<parameter name="Parameter1" class="java.lang.String"/>
 		<queryString language="SQL">
 			<![CDATA[SELECT v.visit_number as visitNumber, i.invoice_number as invoiceNumber, i.total_amount as totalAmount, v.aggregate_id as aggregateId, v.benefit_id as benefitId, v.benefit_name as benefitName, 
 v.category_id as categoryId, v.created_at as createdAt, v.hospital_provider_id as providerId, v.member_name as memberName, v.member_number as memberNumber, v.status
-FROM claims.visit v inner join claims.invoice i on i.visit_number = v.visit_number where v.status != 'REJECTED' and v.aggregate_id = 'eedcec41-d56b-4863-ac57-39485d428621' order by v.visit_number desc
+FROM claims.visit v inner join claims.invoice i on i.visit_number = v.visit_number where v.status != 'REJECTED' and v.aggregate_id = $P{Parameter1}  order by v.visit_number desc
 ]]>
 		</queryString>
 		<field name="visitNumber" class="java.lang.Long">
@@ -360,6 +363,9 @@ from claims.benefit_beneficiary bb where bb.catalog_id = 0 and bb.status = 'ACTI
 				</reportElement>
 				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="Dataset1">
+						<datasetParameter name="Parameter1">
+							<datasetParameterExpression><![CDATA[$F{aggregateId}]]></datasetParameterExpression>
+						</datasetParameter>
 						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 					</datasetRun>
 					<jr:listContents height="20" width="770">
