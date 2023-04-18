@@ -1,0 +1,7 @@
+-- INSTALLATION AND SET-UP
+> sudo apt-get -y install openjdk-8-jdk openjdk-8-jre
+> java -version
+> cat >> /etc/environment << EOL
+> JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+> JRE_HOME=/usr/lib/jvm/java-8-openjdk-amd64/jre
+> EOL
