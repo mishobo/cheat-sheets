@@ -1,11 +1,30 @@
 -- list images
-$ docker images
+> docker images
 
--- list all containers
-$ docker ps -a
+-- run a container
+> docker container run --publish 80:80 --detach --name webhost nginx
+
+-- list all running and stopped containers
+> docker container ls -a
 
 -- removing dangling images
-$ docker image prune
+> docker image prune
 
 -- removing unused containers, images, networks and the entire build cache
-$ docker system prune -a
+> docker system prune -a
+
+-- view logs of a container
+> docker container logs <containerID>
+
+-- running processes in a VM
+> ps aux
+
+-- set up mysql db server
+> docker run --name mysqldb -p 3308:3306  -e MYSQL_ROOT_PASSWORD=31875595 -d mysql:latest
+
+-- container shell access and viewing logs
+> docker logs mysqldb
+> docker exec -it mysqldb bash
+
+-- container statistics
+> docker container stats
