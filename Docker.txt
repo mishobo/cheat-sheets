@@ -1,33 +1,96 @@
--- build docker image
+# build docker image
 > docker build -t reponame:00001 .
 
--- run a container
+# run a container
 > docker run -d -p 8081:80 --name webhost nginx
 
--- list images
+# list images
 > docker images
 
--- list all running and stopped containers
+# list all running and stopped containers
 > docker container ls -a
 
--- removing dangling images
+# removing dangling images
 > docker image prune
 
--- removing unused containers, images, networks and the entire build cache
+# push image to docker hub
+> docker login
+> docker tag imageName <username/repository:tag>
+
+# removing unused containers, images, networks and the entire build cache
 > docker system prune -a
 
--- view logs of a container
+# view logs of a container
 > docker container logs <containerID>
 
--- running processes in a VM
+# running processes in a VM
 > ps aux
 
--- set up mysql db server
-> docker run --name mysqldb -p 3308:3306  -e MYSQL_ROOT_PASSWORD=31875595 -d mysql:latest
+# set up mysql db server
+> docker run -d -p 3308:3306 -e MYSQL_ROOT_PASSWORD=31875595 --mount source=mysql-db,destination=/var/lib/mysql --name mysqldb mysql
 
--- container shell access and viewing logs
+# set up postgres db
+> docker run --name postgres1 -e POSTGRES_PASSWORD=mysecretpassword -d postgres
+> docker container exec -it postgres1 bash
+> pg_isready -U postgres
+
+# container shell access and viewing logs
 > docker logs mysqldb
 > docker exec -it mysqldb bash
 
--- inspect container
+# inspect container
 > docker inspect containerID 
+
+# get etho inet IP
+> ifconfig
+
+# initialize docker swarm
+> docker swarm init
+> docker swarm init --advertise-addr <IP>
+> docker service create <image>
+
+# list docker services running
+> docker service ls
+> docker service logs serviceName
+
+# scale up the services
+> docker service update <servicename> -replicas <no. of services>
+
+# remove a service
+> docker service rm serviceName
+
+# list replicas running in a container
+> docker service ps <container name> 
+
+
+# check nodes in a swarm
+> docker node ls
+
+# check docker networks
+> docker network ls
+
+# deploy the service in docker swarm
+> docker stack deploy -c docker-compose.yml nginx_start
+> docker service ps serviceName
+
+# list stack services name
+> docker stack services nginx_start
+
+# upgrade/ add replicas a docker service
+> docker service scale serviceName
+
+# change service port
+> docker service update --publish-rm 8080 --publish-add 9090:80 serviceName
+
+# docker secrets
+> docker secret create db_password dbpass.txt
+> echo "db_user" | docker secret create db_username -
+> docker secret ls
+> docker secret rm secretName
+
+
+
+
+
+
+

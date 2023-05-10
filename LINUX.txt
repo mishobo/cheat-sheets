@@ -1,0 +1,18 @@
+-- delete a file
+> rm -f fileName
+
+-- command history
+> history
+
+-- list file permissions
+> ls -lrt
+
+-- display contents of a file
+> cat docker-compose.yml
+
+-- service status, start, restart, enable
+> sudo systemctl restart docker
+
+-- disk space
+> df -h
+
