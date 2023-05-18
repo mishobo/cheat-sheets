@@ -26,6 +26,10 @@
 # running processes in a VM
 > ps aux
 
+# keycloak
+> docker network create --attachable -d overlay lctlocalNet
+> docker run -it -d -p 8080:8080 --network lctlocalNet -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin quay.io/keycloak/keycloak:15.0.1
+
 # mariadb setup
 > docker run -d -p 3308:3306 --name mariadb -e MARIADB_USER=abdallah -e MARIADB_PASSWORD=31875595 -e MARIADB_ROOT_PASSWORD=31875595 mariadb:latest
 
