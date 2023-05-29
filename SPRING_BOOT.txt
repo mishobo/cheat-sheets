@@ -1,3 +1,11 @@
+-- Dockerfile
+
+FROM adoptopenjdk/openjdk11:alpine-jre
+WORKDIR /app
+COPY target/azure-file-share-0.0.1-SNAPSHOT.jar /app/app.jar
+EXPOSE 8080
+CMD ["java", "-jar", "/app/app.jar"]
+
 -- application.propertise file
 spring.datasource.url=jdbc:mysql://127.0.0.1:3308/abdallah?allowPublicKeyRetrieval=true&useSSL=False&characterEncoding=UTF-8
 spring.datasource.username=root
