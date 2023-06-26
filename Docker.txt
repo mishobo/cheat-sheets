@@ -38,10 +38,10 @@
 > docker exec -it xenodochial_jones /opt/jboss/keycloak/bin/add-user-keycloak.sh -u admin -p admin
 
 # mariadb setup
-> docker run -d -p 3308:3306 --name mariadb -e MARIADB_USER=abdallah -e MARIADB_PASSWORD=31875595 -e MARIADB_ROOT_PASSWORD=31875595 mariadb:latest
+> docker run -d -p 3308:3306 --name mariadb -v mysql-data:/var/lib/mysql -e MARIADB_USER=abdallah -e MARIADB_PASSWORD=31875595 -e MARIADB_ROOT_PASSWORD=31875595 mariadb:latest
 
 # set up mysql db server
-> docker run -d -p 3306:3306 -e MYSQL_ROOT_PASSWORD=31875595 --mount source=mysql-db,destination=/var/lib/mysql --name mysqldb mysql
+> docker run -d -p 3306:3306 -v mysql-data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=31875595 -v mysql-data:/var/lib/mysql --name mysqldb mysql
 
 # set up postgres db
 > docker run --name postgres1 -e POSTGRES_PASSWORD=mysecretpassword -d postgres
@@ -97,6 +97,7 @@
 > docker service update --publish-rm 8080 --publish-add 9090:80 serviceName
 
 # docker secrets
+- create file dbpass.txt
 > docker secret create db_password dbpass.txt
 > echo "db_user" | docker secret create db_username -
 > docker secret ls

@@ -1,0 +1,2 @@
+# mariadb setup
+> docker run -d -p 3308:3306 --name mariadb -v lct-data:/var/lib/mysql -e MARIADB_USER=abdallah -e MARIADB_PASSWORD=31875595 -e MARIADB_ROOT_PASSWORD=31875595 mariadb:latest

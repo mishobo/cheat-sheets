@@ -27,3 +27,65 @@ $ docker run  -p 8088:8088 -e SPRING_PROFILES_ACTIVE=local  claims-service:lates
 $ mvn spring-boot:run
 
 
+-- WebClient post request
+public void sendBritamClaim(Request request) throws SQLException {
+       System.out.println("request body :" + request);
+       WebClient britamClaimClient = WebClient.builder()
+                .baseUrl("https://apitest.britam.com/MedicalClaims/ProxyServices/MedicalClaimsProxyServiceRS/claim")
+                .build();
+        Response response = britamClaimClient
+                .post()
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .body(Mono.just(request), Response.class)
+                .retrieve()
+                .bodyToMono(Response.class)
+                .block();
+
+        assert response != null;
+        System.out.println("invoice Id : " + res.getResponse().getInvoiceId());
+        sendBritamDocuments(res.getRes().getInvoiceId(), req.getReq().getProviderCode(), req.getReq().getInvoiceNumber());
+    }
+
+-- WebClient post request with request parameters
+    public void sendBritamDocuments(String invoiceId, String providerCode, String invoiceNumber) throws SQLException {
+        try (Connection connection = DriverManager.getConnection(dbUrl, username, password)) {
+                PreparedStatement preparedStatement = connection.prepareStatement(repository.getBritamInvoiceDocument);
+                preparedStatement.setString(1, invoiceNumber);
+                ResultSet rs = preparedStatement.executeQuery();
+                rs.next();
+                System.out.println("invoice :" + rs.getString("file_url"));
+                PreparedStatement preparedStatement1 = connection.prepareStatement(repository.getBritamClaimDocument);
+                preparedStatement1.setString(1, invoiceNumber);
+                ResultSet rs1 = preparedStatement1.executeQuery();
+                rs1.next();
+                System.out.println("claim :" + rs1.getString("file_url"));
+                System.out.println("invoiceId :" + invoiceId);
+                System.out.println("providerCode :" + providerCode);
+
+                WebClient lctDocumentService = WebClient.builder()
+                        .baseUrl("http://localhost:8095/api/file/uploadBritamDocuments")
+                        .build();
+                lctDocumentService
+                        .post()
+                        .uri(uriBuilder -> {
+                            try {
+                                return uriBuilder
+                                        .queryParam("invoiceId", invoiceId)
+                                        .queryParam("providerCode", providerCode)
+                                        .queryParam("invoiceUrl", rs.getString("file_url"))
+                                        .queryParam("claimUrl", rs1.getString("file_url"))
+                                        .build();
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
+                        })
+                        .retrieve().bodyToMono(String.class).block();
+
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+
+
+

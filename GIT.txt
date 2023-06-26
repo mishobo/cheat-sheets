@@ -1,24 +1,30 @@
--- INSTALLATION
+# INSTALLATION
 > sudo apt-get install git
 
--- to see previous commits
+# to see previous commits
 > git log --oneline --graph
 
--- to restore a file on work repo to the head
+# to restore a file on work repo to the head
 > git restore <filePath>
 
---restore file to a previous hash value
+# restore file to a previous hash value
 > git checkout <hash value> <filePath>
 
---temporarily save changes to working directory with a message
+# temporarily save changes to working directory with a message
 > git stash -a save "change message" 
 > git stash list
 
--- remove a stashed record and apply based on a id
+# remove a stashed record and apply based on a id
 > git stash list
 > git stash show stash@{0}
 > git stash pop stash@{0}
 
--- apply a specific stash
+# apply a specific stash
 > git stash apply stash@{index}
+
+# remove untracked files
+> git clean -f -x
+> git clean -f
+> git clean -n
+
 

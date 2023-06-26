@@ -1,23 +1,27 @@
--- RUNNING A MYSQL DOCKER IMAGE
-$ docker run --name mysqldb -p 3308:3306  -e MYSQL_ROOT_PASSWORD=31875595 -d mysql:latest
+# RUNNING A MYSQL DOCKER IMAGE
+> docker run -d -p 3308:3306 -v mysql-data:/var/lib/mysql  -e MYSQL_ROOT_PASSWORD=31875595 --name mysqldb mysql:latest
 
--- LOGIN INTO MYSQL CONTAINER
-$ docker exec -it mysqldb bash
-$ mysql -u root -p
+# LOGIN INTO MYSQL CONTAINER
+> docker exec -it mysqldb bash
+> mysql -u root -p
 
--- installing software in a container
-$ apt-get update
-$ apt-get install nano
+# installing software in a container
+> apt-get update
+> apt-get install nano
 
--- IMPORTING A DUMP
-$ mountdata \.  C:\Users\habdallah\OneDrive\claims.sql
+# IMPORTING A DUMP
+> mountdata \.  C:\Users\habdallah\OneDrive\claims.sql
 
--- Queries
-set foreign_key_checks=0;
-show create table visit;
+# Restore
+> cat backup.sql | docker exec -i CONTAINER /usr/bin/mysql -u root --password=root DATABASE
+> cat C:\Users\Abdalla\Desktop\claims-20230601.sql | docker exec -i mariadb /usr/bin/mysql -u root --password=31875595 claims
 
--- duplicate records
-SELECT invoice_number, COUNT(invoice_number)
-FROM invoice
-GROUP BY invoice_number
-HAVING COUNT(invoice_number) > 1;
+# Queries
+> set foreign_key_checks=0;
+> show create table visit;
+
+# duplicate records
+> SELECT invoice_number, COUNT(invoice_number)
+> FROM invoice
+> GROUP BY invoice_number
+> HAVING COUNT(invoice_number) > 1;

@@ -1,0 +1,5 @@
+> doctl auth init --context <NAME>
+> doctl auth list
+> doctl auth switch --context <NAME>
+> doctl account get
+> doctl serverless install
