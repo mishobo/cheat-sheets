@@ -4,6 +4,10 @@
 > doctl account get
 > doctl serverless install
 
+
+> kubectl get namespaces
+> kubectl create --namespace frontend
+> kubectl config current-context
 > kubectl config get-contexts
 > kubectl config use-context <CONTEXT_NAME>
 > kubectl get pods -n backend -o wide
