@@ -3,3 +3,8 @@
 > doctl auth switch --context <NAME>
 > doctl account get
 > doctl serverless install
+
+> kubectl config get-contexts
+> kubectl config use-context <CONTEXT_NAME>
+> kubectl get pods -n backend -o wide
+> kubectl logs <name> -n backend -f

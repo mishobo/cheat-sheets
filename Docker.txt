@@ -1,3 +1,4 @@
+#ENTRYPOINT ["java", "-Dspring.profiles.active=local", "-jar", "/app.jar"]
 # build docker image
 > docker build -t reponame:00001 .
 

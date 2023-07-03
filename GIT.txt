@@ -7,6 +7,9 @@
 # to restore a file on work repo to the head
 > git restore <filePath>
 
+# unstage a file
+> git restore --staged  src/main/resources/application-local.yml
+
 # restore file to a previous hash value
 > git checkout <hash value> <filePath>
 
@@ -26,5 +29,8 @@
 > git clean -f -x
 > git clean -f
 > git clean -n
+
+# delete git branch
+> git branch --delete develop
 
 
