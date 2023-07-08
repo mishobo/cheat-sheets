@@ -1,0 +1,9 @@
+SET-UP
+
+# XAMMP
+# Composer
+# VsCode
+
+> cd \xammp\htdocs\
+> composer create-project laravel/laravel laravel-crud
+
