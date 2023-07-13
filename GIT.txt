@@ -33,4 +33,7 @@
 # delete git branch
 > git branch --delete develop
 
+> git remote add origin https://github.com/mishobo/laravel-crud.git
+> git remote -v
+
 

@@ -2,8 +2,25 @@ SET-UP
 
 # XAMMP
 # Composer
-# VsCode
+# VsCode (extensions: Laravel Extra Intellisense, Laravel Blade Spacer, Laravel Blade Snippets) 
 
 > cd \xammp\htdocs\
 > composer create-project laravel/laravel laravel-crud
 
+# create db tables from database foldee
+> php artisan migrate
+
+# create new tables in the migration folder
+>  php artisan make:migration create_products_table --create=products
+
+# apply tables to database/ drop-cretae
+> php artisan migrate:refresh
+
+# create database seeder
+> php artisan make:seeder ProductSeeder
+
+# create random data from a seed file
+> php artisan migrate:refresh --seed
+
+# generating multiple random data
+> php artisan make:factory ProductFactory
