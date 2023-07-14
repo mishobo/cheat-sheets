@@ -5,9 +5,11 @@ SET-UP
 # VsCode (extensions: Laravel Extra Intellisense, Laravel Blade Spacer, Laravel Blade Snippets) 
 
 > cd \xammp\htdocs\
+
+# creating a laravel application
 > composer create-project laravel/laravel laravel-crud
 
-# create db tables from database foldee
+# create db tables from database folder
 > php artisan migrate
 
 # create new tables in the migration folder
@@ -15,6 +17,12 @@ SET-UP
 
 # apply tables to database/ drop-cretae
 > php artisan migrate:refresh
+
+# create a controller
+> php artisan make:controller BlogController
+
+# create model
+> php artisan make:model Blog 
 
 # create database seeder
 > php artisan make:seeder ProductSeeder
