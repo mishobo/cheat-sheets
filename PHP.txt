@@ -29,3 +29,6 @@ SET-UP
 
 # generating multiple random data
 > php artisan make:factory ProductFactory
+
+# run laravel application
+> php artisan serve
