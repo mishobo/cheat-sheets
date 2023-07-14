@@ -18,11 +18,8 @@ SET-UP
 # apply tables to database/ drop-cretae
 > php artisan migrate:refresh
 
-# create a controller
-> php artisan make:controller BlogController
-
-# create model
-> php artisan make:model Blog 
+# create a controller with resources and a model
+> php artisan make:controller BlogController --resource --model=Product
 
 # create database seeder
 > php artisan make:seeder ProductSeeder
