@@ -31,4 +31,4 @@ SET-UP
 > php artisan make:factory ProductFactory
 
 # run laravel application
-> php artisan serve
+> php artisan serve --port=8080
