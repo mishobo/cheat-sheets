@@ -1,16 +1,13 @@
 # mariadb setup
 > docker run -d -p 3308:3306 --name mariadb -v mysql-data:/var/lib/mysql -e MARIADB_USER=abdallah -e MARIADB_PASSWORD=31875595 -e MARIADB_ROOT_PASSWORD=31875595 mariadb:latest
 
-# set up mysql db server
+# mysql setup 
 > docker run -d -p 3306:3306 --name mysqldb -v mysql-data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=31875595 mysql
 
-# set up postgres db
-> docker run --name postgres1 -e POSTGRES_PASSWORD=mysecretpassword -d postgres
-> docker container exec -it postgres1 bash
+# postgres setup
+> docker run --name postgresdb -e POSTGRES_PASSWORD=31875595 -d postgres
+> docker container exec -it postgres bash
 > pg_isready -U postgres
-
-# RUNNING A MYSQL DOCKER IMAGE
-> docker run -d -p 3308:3306 -v mysql-data:/var/lib/mysql  -e MYSQL_ROOT_PASSWORD=31875595 --name mysqldb mysql:latest
 
 # LOGIN INTO MYSQL CONTAINER
 > docker exec -it mysqldb bash

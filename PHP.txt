@@ -20,6 +20,8 @@ SET-UP
 
 # create a controller with resources and a model
 > php artisan make:controller BlogController --resource --model=Product
+> php artisan make:model Player -m
+> php artisan make:controller PlayerController --resource  
 
 # create database seeder
 > php artisan make:seeder ProductSeeder
