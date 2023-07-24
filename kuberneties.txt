@@ -1,0 +1,22 @@
+> doctl auth init --context <NAME>
+> doctl auth list
+> doctl auth switch --context <NAME>
+> doctl account get
+> doctl serverless install
+
+
+> kubectl get namespaces
+> kubectl create --namespace frontend
+> kubectl config current-context
+> kubectl config get-contexts
+> kubectl config use-context <CONTEXT_NAME>
+> kubectl get pods -n backend -o wide
+> kubectl logs <name> -n backend -f
+
+> mvn clean install 
+> docker build -t claims-apis . / docker build -t registry.digitalocean.com/lct-registry/claims-apis:202307061535 .
+> docker tag claims-apis registry.digitalocean.com/lct-registry/claims-apis:202307061535
+> docker push registry.digitalocean.com/lct-registry/claims-apis:202307061535
+> digest: sha256:2fa9fd41a357b11b83a9ab42626502aa0d2ced761a0d6745e76b53d8f6c5a7f4 
+> kubectl apply -f .\.k8_manifest\claims-deployment.yaml
+> kubectl exec -n backend utilities-54c9897fdb-dr66v -it -- /bin/sh

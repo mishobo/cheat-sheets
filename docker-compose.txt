@@ -1,4 +1,4 @@
-> docker compose up -d <service name>
-> docker compose logs
 > docker compose build
+> docker compose up -d <service name>
 > docker compose up laravelapp
+> docker compose logs

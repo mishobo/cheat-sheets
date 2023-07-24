@@ -1,0 +1,12 @@
+# creating a file
+> type nul > index.html
+
+# diplay file content
+> type index.html
+
+# Enable telnet on windows 11 (Open terminal as Admin Winx)
+> Enable-WindowsOptionalFeature -Online -FeatureName TelnetClient
+
+# Get system information
+> systeminfo.exe
+
