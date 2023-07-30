@@ -16,3 +16,6 @@
 -- disk space
 > df -h
 
+-- ssh to ubuntu vm
+> ssh root@172.104.158.134
+password: 
