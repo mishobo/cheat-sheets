@@ -1,3 +1,5 @@
+>
+
 -- delete a file
 > rm -f fileName
 
@@ -12,6 +14,20 @@
 
 -- service status, start, restart, enable
 > sudo systemctl restart docker
+
+# list services
+> systemctl --type=service --state=running [dead, exited, failed, inactive, or running]
+
+# list enables services
+> systemctl list-unit-files --state=enabled
+
+# look at one service details
+> systemctl status sshd
+
+# enable service on start up
+> systemctl enable docker
+
+> sudo systemctl enable application .service.
 
 -- disk space
 > df -h

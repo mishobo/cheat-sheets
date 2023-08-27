@@ -1,38 +1,7 @@
--- Dockerfile
-FROM adoptopenjdk/openjdk11:alpine-jre
-WORKDIR /app
-COPY target/azure-file-share-0.0.1-SNAPSHOT.jar /app/app.jar
-EXPOSE 8080
-CMD ["java", "-jar", "/app/app.jar"]
-ENTRYPOINT ["java", "-Dspring.profiles.active=local", "-jar", "/app.jar"]
-ENTRYPOINT ["java", "-Dspring.profiles.active=dev", "-jar", "/app.jar"]
-
--- application.yml file
-server:
-  port: 8081
-spring:
-  datasource:
-    url: jdbc:mariadb://localhost:3302/users?createDatabaseIfNotExist=true
-    username: root
-    password: ethos1234
-  jpa:
-    hibernate:
-      dialect: org.hibernate.dialect.MySQL8Dialect
-      ddl-auto: update
-    show-sql: false
-    properties:
-      hibernate:
-        format_sql: true
-
-
-
+# OBJECT ORIENTED PROGRAMMING PARADIGM
 -- DOCKER COMMANDS
-
 $ docker build -t claims-service:latest .
 $ docker run  -p 8088:8088 -e SPRING_PROFILES_ACTIVE=local  claims-service:latest
-
--- RUN PROJECT
-$ mvn spring-boot:run
 
 
 -- WebClient post request

@@ -1,9 +1,14 @@
+# check docker version
+> docker -v
+
 # build docker image
 > docker build -t reponame:00001 .
 
 # run a container
-
 > docker run -d -p 8081:80 --name webhost nginx
+
+# run react container with nginx
+> docker run -d -p 8080:80 react-nginx
 
 # container logs
 > docker logs containerId
@@ -51,6 +56,9 @@
 # get etho inet IP
 > ifconfig
 
+# check if docker swarm is running
+> docker info
+
 # initialize docker swarm
 > docker swarm init
 > docker swarm init --advertise-addr <IP>
@@ -89,12 +97,17 @@
 # change service port
 > docker service update --publish-rm 8080 --publish-add 9090:80 serviceName
 
+# create a sample secret
+> openssl rand -base64 128 | docker secret create secure-key -
+
 # docker secrets
-- create file dbpass.txt
+# create file dbpass.txt
 > docker secret create db_password dbpass.txt
 > echo "db_user" | docker secret create db_username -
 > docker secret ls
 > docker secret rm secretName
+
+
 
 
 

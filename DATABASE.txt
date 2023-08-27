@@ -4,6 +4,10 @@
 # mysql setup 
 > docker run -d -p 3306:3306 --name mysqldb -v mysql-data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=31875595 mysql
 
+# mssql server setup
+> sudo docker pull mcr.microsoft.com/mssql/server:2022-latest
+> sudo docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=ethos@123" -p 1433:1433 --name sql1 --hostname sql1 -d mcr.microsoft.com/mssql/server:2022-latest
+
 # postgres setup
 > docker run --name postgresdb -e POSTGRES_PASSWORD=31875595 -d postgres
 > docker container exec -it postgres bash

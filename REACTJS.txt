@@ -1,4 +1,31 @@
-* new rect app
-$ npx create-react-app react-frontend
-$ npm run build
-$ npm start
+# new rect app
+> npx create-react-app react-frontend
+> npm run build
+> npm start
+
+# check node version
+> node -v
+
+# check npm version
+> npm -v
+
+# update npm
+> npm install -g npm
+
+# build a react project from scratch
+1. initiate a node project
+> npm init -y
+
+2. Install dependencies 
+> npm i webpack babel-loader @babel/preset-react @babel/core babel-preset-react html-webpack-plugin webpack-dev-server css-loader style-loader @babel/plugin-proposal-class-properties webpack-cli -D && npm i react react-dom -S
+
+3. create an SRC folder and two index.js and index.html
+
+# see hiden files and folders
+> npm run eject
+
+# create react project using vite
+> npm createvite@latest ( select project name, react with javascript )
+
+# creating a next.js app
+> npx create-next-app@latest <appName>

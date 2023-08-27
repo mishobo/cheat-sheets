@@ -9,6 +9,12 @@ SET-UP
 # creating a laravel application
 > composer create-project laravel/laravel laravel-crud
 
+# install dependencies
+> composer install
+
+# generate app api key
+> php artisan key:generate
+
 # create db tables from database folder
 > php artisan migrate
 

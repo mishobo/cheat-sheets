@@ -1,0 +1,5 @@
+# Convert Maven build to gradle
+> gradle init
+
+# Refresh dependencies
+> ./gradlew clean build --refresh-dependencies
