@@ -1,7 +1,23 @@
->
+-- disk space
+> df -h
+
+# Memory
+> free -g
+
+# cpu info
+> lscpu
+
+> colored terminal
+> apt install fish
+
+# removing unused packages
+> sudo apt-get autoremove
 
 -- delete a file
 > rm -f fileName
+
+# remove folder
+> rm -rf <folderName>
 
 -- command history
 > history
@@ -35,3 +51,9 @@
 -- ssh to ubuntu vm
 > ssh root@172.104.158.134
 password: 
+
+# add user to an app/service
+> sudo usermod -aG docker ${USER}
+> su - ${USER}
+> groups
+> sudo usermod -aG docker username

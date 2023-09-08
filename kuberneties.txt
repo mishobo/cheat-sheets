@@ -1,3 +1,33 @@
+# unistall kuberneties
+> kubeadm reset
+> apt-get purge kubeadm kubectl kubelet kubernetes-cni kube* 
+> sudo apt-get autoremove
+
+# start minikube
+> minikube start --force
+> kubectl version --client
+> sudo apt install conntrack
+> sudo minikube start --vm-driver=none
+
+# get cluster information
+> kubectl config view
+
+# create deployment
+> kubectl create deployment hello-node --image=k8s.gcr.io/echoserver:1.4
+> kubectl get deployment
+
+# get pods
+> kubectl get pods
+
+# expose cluster externally
+> kubectl expose deployment hello-node --type=LoadBalancer --port=8080
+> kubectl get services
+
+# get service details
+> minikube service hello-node
+
+ 
+
 > doctl auth init --context <NAME>
 > doctl auth list
 > doctl auth switch --context <NAME>
@@ -15,6 +45,7 @@
 > kubectl get pods -n backend -o wide
 > kubectl logs <name> -n backend -f
 
+# deploying springboot image
 > mvn clean install 
 > docker build -t claims-apis . / docker build -t registry.digitalocean.com/lct-registry/claims-apis:202307061535 .
 > docker tag claims-apis registry.digitalocean.com/lct-registry/claims-apis:202307061535

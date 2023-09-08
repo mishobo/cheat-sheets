@@ -1,6 +1,15 @@
 # check docker version
 > docker -v
 
+# uninstall
+> dpkg -l | grep -i docker
+> sudo apt-get purge docker-ce docker-ce-cli containerd.io
+> for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do sudo apt-get remove $pkg; done
+
+# installation
+> sudo apt-get update
+> sudo apt-get install ca-certificates curl gnupg
+
 # build docker image
 > docker build -t reponame:00001 .
 
@@ -64,22 +73,34 @@
 > docker swarm init --advertise-addr <IP>
 > docker service create <image>
 
+# get manager join-token
+> docker swarm join-token manager
+
+# check nodes in a swarm
+> docker node ls
+
+# remove a node from a swarm
+> docker swarm leave --force || docker swarm leave -f 
+
+# run multiple services in a stack
+> docker stack deploy -c docker-compose.yml nginx_start
+
 # list docker services running
+> docker stack ls
 > docker service ls
+> docker stack services serviceName
 > docker service logs serviceName
 
 # scale up the services
 > docker service update <servicename> -replicas <no. of services>
 
 # remove a service
+> docker service ls
+> docker service update --repilcas=0
 > docker service rm serviceName
 
 # list replicas running in a container
 > docker service ps <container name> 
-
-
-# check nodes in a swarm
-> docker node ls
 
 # check docker networks
 > docker network ls
@@ -97,8 +118,6 @@
 # change service port
 > docker service update --publish-rm 8080 --publish-add 9090:80 serviceName
 
-# create a sample secret
-> openssl rand -base64 128 | docker secret create secure-key -
 
 # docker secrets
 # create file dbpass.txt

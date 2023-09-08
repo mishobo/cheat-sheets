@@ -12,6 +12,7 @@
 > docker run --name postgresdb -e POSTGRES_PASSWORD=31875595 -d postgres
 > docker container exec -it postgres bash
 > pg_isready -U postgres
+> docker run --name postgresql -e POSTGRES_USER=postgress -e POSTGRES_PASSWORD=31875595 -p 5432:5432 -v /data:/var/lib/postgresql/data -d postgres
 
 # LOGIN INTO MYSQL CONTAINER
 > docker exec -it mysqldb bash

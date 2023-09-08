@@ -5,3 +5,6 @@
 > sudo systemctl start jenkins
 > sudo systemctl status jenkins
 > sudo systemctl enable jenkins
+
+# uninstall
+> sudo apt-get remove --purge jenkins
