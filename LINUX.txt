@@ -7,6 +7,9 @@
 # cpu info
 > lscpu
 
+# check install apps
+> dpkg --list
+
 # colored terminal
 > sudo apt install fish
 > fish
