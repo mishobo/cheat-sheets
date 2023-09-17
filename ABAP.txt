@@ -1,0 +1,38 @@
+
+#Transaction codes (short cuts to different applications)
+SE11 − Dictionary definitions
+SE14 − Database utility
+SE16 − Data Browser (display only)
+SE16n − Modify: “&sap_edit” (uase16n)
+SD11 − Data model
+SM30/SM31 − SAP Table view maintenance
+SE54 (SOBJ) − Table / View Cluster
+SE37 − Function module editor
+SE38 / SE39 - Program editor / split screen
+SA38 − Program execution
+SE80 − ABAP development workbench
+SE84 − Object navigator
+SE18 − BAdI definitions
+SE19 − BAdI implementations
+SE24 − Class builder
+SWO1/2 − Business object builder / browser
+SMARTFORMS − Smart forms administration
+SE71 − SAP script (Form painter)
+SE43 − Area menu maintenance
+SE91 − Message maintenance
+SE93 − Transaction maintenance
+
+SM21 − System log sm13 Update requests
+ST22 − ABAP Runtime Error (Dump)
+SM12 − Table look entries
+SM56 − Number range buffers
+SNRO − Number ranges
+SE30 − Runtime analysis
+ST01 − System trace
+ST05 − SQL Trace
+DB02, ST04 − Database tools / performance
+ST02, ST06 − Database tune summary
+SCU3 − Table logging (see V_DDAT_54)
+
+kengen SAP Program
+> ZHELLO1

@@ -1,3 +1,6 @@
+# install kubeadm
+> nc 127.0.0.1 6443
+
 # unistall kuberneties
 > kubeadm reset
 > apt-get purge kubeadm kubectl kubelet kubernetes-cni kube* 
@@ -15,6 +18,7 @@
 # create deployment
 > kubectl create deployment hello-node --image=k8s.gcr.io/echoserver:1.4
 > kubectl get deployment
+> kubectl delete deployment deploymentName
 
 # get pods
 > kubectl get pods
@@ -22,9 +26,13 @@
 # expose cluster externally
 > kubectl expose deployment hello-node --type=LoadBalancer --port=8080
 > kubectl get services
-
-# get service details
 > minikube service hello-node
+> kubectl delete service serviceName
+
+# namespace comands
+> kubectl get namespaces
+> kubectl get pods --namespace <namespace>
+> kubectl create namespace <namespace>
 
  
 
@@ -42,14 +50,15 @@
 > kubectl config current-context
 > kubectl config get-contexts
 > kubectl config use-context <CONTEXT_NAME>
-> kubectl get pods -n backend -o wide
 > kubectl logs <name> -n backend -f
 
 # deploying springboot image
 > mvn clean install 
-> docker build -t claims-apis . / docker build -t registry.digitalocean.com/lct-registry/claims-apis:202307061535 .
+> docker build -t claims-apis .
+> docker build -t registry.digitalocean.com/lct-registry/claims-apis:202307061535 .
 > docker tag claims-apis registry.digitalocean.com/lct-registry/claims-apis:202307061535
 > docker push registry.digitalocean.com/lct-registry/claims-apis:202307061535
 > digest: sha256:2fa9fd41a357b11b83a9ab42626502aa0d2ced761a0d6745e76b53d8f6c5a7f4 
 > kubectl apply -f .\.k8_manifest\claims-deployment.yaml
+> kubectl get pods -n backend -o wide
 > kubectl exec -n backend utilities-54c9897fdb-dr66v -it -- /bin/sh
