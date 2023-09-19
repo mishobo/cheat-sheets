@@ -1,5 +1,6 @@
 # install kubeadm
 > sudo apt-get update
+> sudo apt-get install -y docker.io
 cat <<EOF | sudo tee /etc/modules-load.d/containerd.conf
 overlay
 br_netfilter
@@ -25,6 +26,70 @@ EOF
 > sudo apt-get update
 > sudo apt-get install -y kubelet kubeadm kubectl
 > sudo apt-mark hold kubelet kubeadm kubectl
+# create kuberneties cluster/ master node
+> kubeadm init --pod-network-cidr=192.168.0.0/16
+
+  mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+export KUBECONFIG=/etc/kubernetes/admin.conf 
+
+# token generated
+kubeadm join 143.198.65.88:6443 --token edl9oo.bnwmloh28ec0r5oa \
+        --discovery-token-ca-cert-hash sha256:53bc72f721a1aff6d74c25a293604b53632d760d0a34f2a5aa4a5e7877bc2ec9 
+
+> kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+> kubectl get pods --all-namespaces
+
+# creating token for joining nodes
+> kubeadm token create --print-join-command
+> kubeadm token list
+
+# drain a k8s node
+> kubectl drain <node_name> --ignore-daemonsets --force
+
+# rejoin a drained node
+> kubectl uncordon <node_name>
+
+# upgrade k8s master
+1. Drain control plane
+2. Plan the upgrade
+3. apply the upgrade
+4. upgrade kubectl & kubelet on control plane node
+5. uncordon the node
+
+> kubectl get nodes
+> kubectl drain k8s-master-node --ignore-daemonsets
+> sudo apt-get install -y --allow-change-held-package kubeadm=1.21.1-00
+> kubeadm version
+> sudo kubeadm upgrade plan v1.21.1-00
+> kubeadm upgrade apply v1.21.1-00
+> sudo apt-get update
+> sudo systemctl daemon-reload
+> sudo systemctl restart kubelet
+> kubectl get nodes
+> kubectl uncordon k8s-master-node
+
+# upgrade k8s worker
+1. upgrade worker node
+2. drain worker node
+3. upgrade kubeadm
+4. upgrade kubelet config
+5. upgrade kubectl and kubelet
+6. uncordon the node
+
+> kubectl drain <node-to-drain> --ignore-daemonsets --force
+> sudo apt-get update
+> sudo apt-get install -y --allow-change-held-packages kubeadm=1.21.1-00
+> kubeadm version
+> sudo kubeadm upgrade node
+> sudo apt-get update
+> sudo apt-get install -y --allow-change-held-packages kubelet=1.21.1-00 kubectl=1.21.1-00
+> sudo systemctl daemon-reload
+> sudo systemctl restart kubelet
+> kubectl get nodes
+> kubectl uncordon <node-to-uncordon>
 
 
 # unistall kuberneties
