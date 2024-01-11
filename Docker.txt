@@ -40,6 +40,7 @@
 
 # removing unused containers, images, networks and the entire build cache
 > docker system prune -a
+> docker system prune --all --force --volumes
 
 
 

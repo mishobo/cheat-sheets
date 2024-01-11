@@ -3,6 +3,18 @@
 > npm run build
 > npm start
 
+# Create Redux Store
+> npm install redux redux-thunk
+> npm install --save-dev redux-devtools-extension
+
+
+# production build
+> yarn build
+> npx serve -s build
+
+# To files delete
+> App.css, App.test.js
+
 # check node version
 > node -v
 
@@ -39,3 +51,35 @@ npm i @mui/material @emotion/react @emotion/styled @mui/x-data-grid @mui/icons-m
 
 # hidden elements
 > document.querySelector('[data-testid=manual-navigation]').classList.remove('always-hidden')
+
+# react folder structure
+src/
+  |- app/
+     |- App.js                # Main React component
+     |- store.js              # Redux Toolkit store configuration
+  |- features/
+     |- feature1/
+        |- feature1Slice.js  # Redux Toolkit Slice configuration for feature1
+        |- Feature1.js       # Feature1 component
+        |- feature1API.js     # API calls related to feature1
+     |- feature2/
+        |- feature2Slice.js  # Redux Toolkit Slice configuration for feature2
+        |- Feature2.js       # Feature2 component
+        |- feature2API.js     # API calls related to feature2
+  |- components/
+     |- CommonComponent.js    # Commonly used components
+  |- pages/
+     |- XxxPage.js            # Page component
+  |- hooks/
+     |- useLocalStorage.js    # Custom hook for storing data in localStorage
+     |- useFetch.js           # Custom hook for fetching data from an API
+  |- utils/
+     |- utilityFunctions.js   # Helper functions
+  |- API/
+     |- index.js              # API exports
+  |- config/
+     |- config.js             # Application configuration file
+  |- router/
+     |- index.js              # React Router configuration
+  |- .env                     # Environment variables
+  |- index.js                 # Application entry file

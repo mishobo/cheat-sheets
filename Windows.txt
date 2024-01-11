@@ -1,3 +1,6 @@
+# list files in a directory
+> dir
+
 # creating a file
 > type nul > index.html
 

@@ -1,3 +1,6 @@
+# encode to base64
+> echo -n "text2encode" | base64
+
 -- disk space
 > df -h
 
@@ -6,6 +9,7 @@
 
 # cpu info
 > lscpu
+> top
 
 # check install apps
 > dpkg --list

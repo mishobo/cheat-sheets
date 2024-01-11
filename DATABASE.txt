@@ -1,8 +1,12 @@
 # mariadb setup
-> docker run -d -p 3308:3306 --name mariadb -v mysql-data:/var/lib/mysql -e MARIADB_ROOT_PASSWORD=31875595 mariadb:latest
+> docker run -d -p 3306:3306 --name mariadb -v iki-data:/var/lib/mysql -e MARIADB_ROOT_PASSWORD=123456 mariadb:latest
 
 # mysql setup 
-> docker run -d -p 3306:3306 --name mysqldb -v mysql-data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=31875595 mysql
+> docker run -d -p 3306:3306 --name mysqldb -v mysql-data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=123456 mysql
+
+# create a user with an ip
+CREATE USER 'abdallah'@'102.220.169.2' IDENTIFIED BY '123456';
+GRANT ALL PRIVILEGES ON *.* TO 'abdallah'@'102.220.169.2' WITH GRANT OPTION;
 
 # mssql server setup
 > sudo docker pull mcr.microsoft.com/mssql/server:2022-latest
@@ -32,6 +36,8 @@
 # Queries
 > set foreign_key_checks=0;
 > show create table visit;
+
+> set sql_safe_updates=0;
 
 # duplicate records
 > SELECT invoice_number, COUNT(invoice_number)

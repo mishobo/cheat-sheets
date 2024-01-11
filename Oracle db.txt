@@ -1,0 +1,11 @@
+docker run -d -p 1522:1521 -e ORACLE_PASSWORD=31875595 -v oracledb-volume:/opt/oracle/oradata --name oracledb gvenzl/oracle-free
+
+SET SERVEROUTPUT ON;
+
+select name from v$database;
+
+select * from all_db_links;
+
+create database link "kplcmed" connect to system identified by "31875595" using '172.16.3.28:1522/freepdb1';
+
+SELECT id, description, title  FROM tutorials@kplcmed;
