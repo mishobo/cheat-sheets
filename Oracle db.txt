@@ -8,4 +8,24 @@ select * from all_db_links;
 
 create database link "kplcmed" connect to system identified by "31875595" using '172.16.3.28:1522/freepdb1';
 
-SELECT id, description, title  FROM tutorials@kplcmed;
+SELECT * FROM customers@kplcmed;
+
+INSERT INTO Customers@kplcmed (id, address, age, name, salary) VALUES (1,'kabiria', 29, 'hussein abdallah', 30000);
+UPDATE Customers@kplcmed SET age = 30 WHERE id = 3;
+
+SELECT p.ProductID, p.Name, i.InvoiceDate, id.Quantity` FROM Products p JOIN InvoiceDetail@SalesLNK id ON id.ProductID = p.ProductID JOIN Invoices@SalesLNK i ON i.InvoiceID = id.InvoiceID WHERE p.ProviderID = 20;
+
+select * from all_triggers where table_name = 'CUSTOMERS';
+
+DROP TRIGGER INSERT_REMOTE_CUSTOMERS;
+
+CREATE OR REPLACE TRIGGER display_salary_changes 
+BEFORE DELETE OR INSERT OR UPDATE ON customers 
+FOR EACH ROW 
+WHEN (NEW.ID > 0) 
+DECLARE 
+PRAGMA AUTONOMOUS_TRANSACTION;
+BEGIN 
+   INSERT INTO Customers@kplcmed (id, address, age, name, salary) VALUES (:NEW.ID,:NEW.ADDRESS, :NEW.AGE,:NEW.NAME, :NEW.SALARY);
+   commit;
+END; 
