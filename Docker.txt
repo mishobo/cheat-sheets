@@ -16,6 +16,13 @@
 # run a container
 > docker run -d -p 8081:80 --name webhost nginx
 
+# copy a file into a container
+> docker cp filepath containerName:/filedestination
+
+# copy a file out of a container
+> docker cp containerName:/filepath destination
+> docker cp feedback:/app/feedback/walkingdead.txt  D:/projects/devops/docker/data-volumes-01-starting-setup/feedback/
+
 # run react container with nginx
 > docker run -d -p 8080:80 react-nginx
 
@@ -43,7 +50,6 @@
 > docker system prune --all --force --volumes
 
 
-
 # running processes in a VM
 > ps aux
 
@@ -51,14 +57,13 @@
 > docker network create --attachable -d overlay lctlocalNet
 > docker run -it -d -p 8080:8080 --network lctlocalNet -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin quay.io/keycloak/keycloak:15.0.1
 > docker run -it -d -p 8080:8080  -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin quay.io/keycloak/keycloak:15.0.1
-
-# 
 > docker exec -it xenodochial_jones /opt/jboss/keycloak/bin/add-user-keycloak.sh -u admin -p admin
 
 
 # container shell access and viewing logs
 > docker logs mysqldb
 > docker exec -it mysqldb bash
+> docker exec -it feedback /bin/sh
 
 # inspect container
 > docker inspect containerID 
