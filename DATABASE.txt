@@ -36,7 +36,6 @@ GRANT ALL PRIVILEGES ON *.* TO 'abdallah'@'102.220.169.2' WITH GRANT OPTION;
 # Queries
 > set foreign_key_checks=0;
 > show create table visit;
-
 > set sql_safe_updates=0;
 
 # duplicate records

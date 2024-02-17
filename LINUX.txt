@@ -1,3 +1,16 @@
+# new vm commands
+> sudo su -
+> apt-get update
+> apt-get install nginx -y
+> ps auwx | grep nginx
+
+# uninstall nginx service
+> sudo systemctl stop nginx
+> sudo apt-get purge nginx
+> sudo apt-get autoremove
+> sudo rm -rf /etc/nginx /var/log/nginx
+> sudo systemctl status nginx
+
 # encode to base64
 > echo -n "text2encode" | base64
 

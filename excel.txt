@@ -1,0 +1,1 @@
+="insert into job_scale (scale, description, in_patient_limit, job_category, lct_category_id, out_patient_limit) values ('"&A2&"', '"&B2&"', '"&D2&"', '"&E2&"', '"&F2&"', '"&C2&"');"
