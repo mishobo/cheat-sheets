@@ -39,7 +39,8 @@ GRANT ALL PRIVILEGES ON *.* TO 'abdallah'@'102.220.169.2' WITH GRANT OPTION;
 > set sql_safe_updates=0;
 
 # duplicate records
-> SELECT invoice_number, COUNT(invoice_number)
-> FROM invoice
-> GROUP BY invoice_number
-> HAVING COUNT(invoice_number) > 1;
+> SELECT invoice_number, COUNT(invoice_number) FROM invoice GROUP BY invoice_number HAVING COUNT(invoice_number) > 1;
+
+# unique constraints
+ALTER TABLE `payer-proxy`.`claims_responses` 
+ADD UNIQUE INDEX `visit_number_UNIQUE` (`visit_number` ASC) VISIBLE;
