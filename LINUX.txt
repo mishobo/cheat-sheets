@@ -1,3 +1,9 @@
+# time zone
+> date
+
+# to change the timezone to Africa/Nairobi
+> sudo ln -sf /usr/share/zoneinfo/Africa/Nairobi /etc/localtime
+
 # new vm commands
 > sudo su -
 > apt-get update
